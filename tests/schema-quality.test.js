@@ -18,13 +18,13 @@ function traverse(obj, callback, options = {}) {
   callback(obj, currentPath)
 
   // Recursively traverse nested objects
-  for (const key in obj) {
-    if (skipKeys.includes(key)) continue // Skip specified keys
+  Object.keys(obj).forEach(key => {
+    if (skipKeys.includes(key)) return // Skip specified keys
     if (typeof obj[key] === "object") {
       const newPath = currentPath ? `${currentPath}.${key}` : key
       traverse(obj[key], callback, { visited, currentPath: newPath, skipKeys })
     }
-  }
+  })
 }
 
 describe("JSON Schema Quality Check", () => {

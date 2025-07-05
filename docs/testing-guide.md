@@ -386,7 +386,7 @@ When creating a new schema, follow these quality standards:
   "title": "YourSchemaName",
   "description": "Clear, detailed description ending with a period.",
   "type": "string|object|array",
-  "examples": ["example1", "example2"] // Required for enums
+  "examples": ["example1", "example2"]
   // ... your schema
 }
 ```
