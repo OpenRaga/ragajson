@@ -74,8 +74,8 @@ describe("JSON Schema Quality Check", () => {
         expect(schema).toHaveProperty(field)
       })
 
-      // Validate $schema format
-      expect(schema.$schema).toMatch(/^https:\/\/json-schema\.org\/draft\//)
+      // Validate exact schema version (consolidated check)
+      expect(schema.$schema).toBe("https://json-schema.org/draft/2020-12/schema")
     })
   })
 
@@ -109,10 +109,6 @@ describe("JSON Schema Quality Check", () => {
         }
       }
     )
-
-    test.each(cachedSchemas)("%s should use correct schema version", ({ filePath, schema }) => {
-      expect(schema.$schema).toBe("https://json-schema.org/draft/2020-12/schema")
-    })
   })
 
   describe("🎯 Structure Consistency", () => {
@@ -192,6 +188,7 @@ describe("JSON Schema Quality Check", () => {
 
       refs.forEach(ref => {
         if (ref.startsWith("https://raw.githubusercontent.com/OpenRaga/ragajson/main/")) {
+          // Validate remote GitHub raw URL refs
           const localPath = path.resolve(
             __dirname,
             "..",
@@ -204,6 +201,16 @@ describe("JSON Schema Quality Check", () => {
           expect(() => {
             JSON.parse(fs.readFileSync(localPath, "utf8"))
           }).not.toThrow()
+        } else if (ref.startsWith("#/")) {
+          // Validate local JSON Pointer refs within the same schema
+          const pointer = ref.substring(2) // Remove '#/' prefix
+          const parts = pointer.split("/")
+          
+          let current = schema
+          for (const part of parts) {
+            expect(current).toHaveProperty(part)
+            current = current[part]
+          }
         }
       })
     })
