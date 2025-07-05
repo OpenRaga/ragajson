@@ -55,6 +55,8 @@ npm run test:schema-quality
 - [Testing Guide](docs/testing-guide.md) - Validation tools
 - [Examples](examples/) - Real raga data _(coming soon)_
 
+---
+
 _Made with love for the global Indian classical music community_
 
 Copyright © 2025 OpenRaga Contributors
