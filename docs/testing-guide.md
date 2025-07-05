@@ -9,7 +9,7 @@ The RagaJSON testing system ensures comprehensive validation of the project's JS
 ```
 ragajson/
 ├── tests/
-│   ├── schema-validation.test.js    # Meta-validation tests
+│   ├── schema-validation.test.js    # Schema validation tests
 │   └── schema-quality.test.js       # Quality and best practices tests
 ├── scripts/
 │   └── validate-schemas.js          # Quick schema validation
