@@ -6,23 +6,23 @@ const glob = require("glob")
 
 // Generalized utility function for traversing objects with circular reference protection
 function traverse(obj, callback, options = {}) {
-  const { visited = new WeakSet(), currentPath = "", skipKeys = [] } = options;
-  
-  if (typeof obj !== "object" || obj === null) return;
+  const { visited = new WeakSet(), currentPath = "", skipKeys = [] } = options
+
+  if (typeof obj !== "object" || obj === null) return
 
   // Prevent infinite recursion
-  if (visited.has(obj)) return;
-  visited.add(obj);
+  if (visited.has(obj)) return
+  visited.add(obj)
 
   // Apply callback to current object
-  callback(obj, currentPath);
+  callback(obj, currentPath)
 
   // Recursively traverse nested objects
   for (const key in obj) {
-    if (skipKeys.includes(key)) continue; // Skip specified keys
+    if (skipKeys.includes(key)) continue // Skip specified keys
     if (typeof obj[key] === "object") {
-      const newPath = currentPath ? `${currentPath}.${key}` : key;
-      traverse(obj[key], callback, { visited, currentPath: newPath, skipKeys });
+      const newPath = currentPath ? `${currentPath}.${key}` : key
+      traverse(obj[key], callback, { visited, currentPath: newPath, skipKeys })
     }
   }
 }
@@ -259,7 +259,7 @@ describe("JSON Schema Quality Check", () => {
       // Use custom traversal for this case because we need to skip certain keys
       const skipKeys = [
         "if",
-        "then", 
+        "then",
         "else",
         "allOf",
         "anyOf",
@@ -268,7 +268,7 @@ describe("JSON Schema Quality Check", () => {
         "examples",
         "enum",
         "const"
-      ];
+      ]
 
       traverse(schema, handleDescriptions, { skipKeys })
     })
