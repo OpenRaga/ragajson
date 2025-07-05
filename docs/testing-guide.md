@@ -2,7 +2,7 @@
 
 ## Overview
 
-The RagaJSON testing system ensures validation of the project's JSON Schema files. This guarantees that all schemas are correctly written according to the JSON Schema draft-2020-12 specification.
+The RagaJSON testing system ensures comprehensive validation of the project's JSON Schema files. This guarantees that all schemas are correctly written according to the JSON Schema draft-2020-12 specification and meet high quality standards.
 
 ## Test Structure
 
@@ -81,7 +81,7 @@ This project uses three complementary validation approaches, following industry 
 
 - **Purpose**: Enforce quality standards and best practices
 - **Validates**: Metadata completeness, documentation quality, naming conventions
-- **Output**: Detailed quality reports with 158 comprehensive checks
+- **Output**: Detailed quality reports with comprehensive checks
 - **When to use**: Code reviews, maintaining high standards
 - **Focus**: Developer experience and maintainability
 
@@ -141,39 +141,52 @@ npm run test                  # All tests including quality
 
 ### Quality Standards (`npm run test:schema-quality`)
 
+#### 📋 Schema Structure Validation
+
+- ✅ Valid object structure
+- ✅ Required JSON Schema fields
+- ✅ Proper schema format validation
+
 #### 📝 Metadata Requirements
 
 - ✅ All required metadata fields present
 - ✅ Examples provided for enum schemas
 - ✅ Correct schema version usage
+- ✅ Meaningful descriptions
+- ✅ Proper capitalization and punctuation
 
 #### 🎯 Structure Consistency
 
 - ✅ Consistent `$id` pattern formatting
 - ✅ Enum schemas follow standard structure
 - ✅ Type schemas follow standard structure
+- ✅ Cross-schema consistency checks
 
 #### 🏷️ displayName and Custom Properties
 
 - ✅ `displayName` present for complex enums
 - ✅ Proper custom field patterns (x- prefix support)
+- ✅ Validation of enum display names
 
 #### 🔗 $ref Link Validation
 
 - ✅ All `$ref` links are valid and resolvable
 - ✅ Cross-references work within project
+- ✅ Local path validation
 
 #### 📚 Documentation Readiness
 
 - ✅ All properties have descriptive documentation
-- ✅ Meaningful enum descriptions (>20 characters)
+- ✅ Meaningful enum descriptions
 - ✅ All enum values properly documented
+- ✅ Description quality standards
 
 #### 🎨 Style and Formatting
 
 - ✅ Naming conventions followed (PascalCase titles)
 - ✅ Proper JSON formatting and indentation
 - ✅ Descriptions end with periods
+- ✅ Consistent style across all schemas
 
 ## Error Examples and Solutions
 
@@ -258,7 +271,7 @@ Expected $schema to be 'https://json-schema.org/draft/2020-12/schema', got 'http
 ```json
 {
   "title": "MyEnum",
-  "description": "A comprehensive enumeration of valid values for my specific use case." // ← make it >20 chars and end with period
+  "description": "A comprehensive enumeration of valid values for my specific use case." // ← make it meaningful and end with period
 }
 ```
 
@@ -381,11 +394,11 @@ When creating a new schema, follow these quality standards:
 ### 2. Quality Standards Checklist
 
 - ✅ **Title**: PascalCase, descriptive
-- ✅ **Description**: >20 characters, ends with period
+- ✅ **Description**: Meaningful, ends with period
 - ✅ **Examples**: Provided for all enum schemas
 - ✅ **displayName**: Added to all oneOf const values
 - ✅ **$id**: Uses correct GitHub raw URL pattern
-- ✅ **Properties**: All have meaningful descriptions >5 characters
+- ✅ **Properties**: All have meaningful descriptions
 
 ### 3. For Enum Schemas
 
@@ -428,7 +441,7 @@ npm test
 
 ### 5. Common Quality Issues to Avoid
 
-- ❌ Short descriptions (<20 chars)
+- ❌ Short or meaningless descriptions
 - ❌ Missing examples for enums
 - ❌ Missing displayName for oneOf const
 - ❌ Incorrect $id pattern
