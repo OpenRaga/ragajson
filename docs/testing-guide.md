@@ -9,7 +9,8 @@ The RagaJSON testing system ensures validation of the project's JSON Schema file
 ```
 ragajson/
 ├── tests/
-│   └── schema-validation.test.js    # Jest tests for schemas
+│   ├── schema-validation.test.js    # Meta-validation tests
+│   └── schema-quality.test.js       # Quality and best practices tests
 ├── scripts/
 │   └── validate-schemas.js          # Quick schema validation
 └── docs/
@@ -42,7 +43,8 @@ Runs a quick check of all schemas with visual output:
 ### Comprehensive Testing
 
 ```bash
-npm run test:schemas
+npm run test:schemas           # Basic schema validation
+npm run test:schema-quality    # Advanced quality checks
 ```
 
 Runs detailed Jest tests with comprehensive reports.
@@ -53,13 +55,13 @@ Runs detailed Jest tests with comprehensive reports.
 npm test
 ```
 
-Runs all project tests.
+Runs all project tests (validation + quality + any other tests).
 
-## Two Validation Approaches
+## Three-Tier Testing Strategy
 
-This project uses two complementary validation methods, following industry best practices:
+This project uses three complementary validation approaches, following industry best practices:
 
-### Quick Validation Script (`npm run validate`)
+### 1. Quick Validation Script (`npm run validate`)
 
 - **Purpose**: Fast feedback during development
 - **Output**: Visual, human-readable with emojis and colors
@@ -67,41 +69,57 @@ This project uses two complementary validation methods, following industry best 
 - **Audience**: Developers
 - **Performance**: Fast execution, immediate results
 
-### Jest Tests (`npm run test:schemas`)
+### 2. Schema Validation Tests (`npm run test:schemas`)
 
-- **Purpose**: Formal testing for CI/CD and comprehensive validation
-- **Output**: Structured test reports, detailed error information
-- **When to use**: CI/CD pipelines, pull requests, integration testing
-- **Audience**: Automation systems, test runners
-- **Performance**: More thorough, generates test coverage reports
+- **Purpose**: Formal JSON Schema compliance testing
+- **Validates**: Syntax, meta-schema compliance, $ref links
+- **Output**: Structured test reports for basic validation
+- **When to use**: CI/CD pipelines, ensuring schema correctness
+- **Focus**: Technical correctness
 
-### Why Both?
+### 3. Schema Quality Tests (`npm run test:schema-quality`)
 
-This dual approach provides several benefits:
+- **Purpose**: Enforce quality standards and best practices
+- **Validates**: Metadata completeness, documentation quality, naming conventions
+- **Output**: Detailed quality reports with 158 comprehensive checks
+- **When to use**: Code reviews, maintaining high standards
+- **Focus**: Developer experience and maintainability
+
+### Why Three Tiers?
+
+This comprehensive approach provides several benefits:
 
 1. **Developer Experience**: Quick script gives instant, visual feedback while coding
-2. **Automation Integration**: Jest tests integrate seamlessly with CI/CD systems
-3. **Different Detail Levels**: Script for overview, tests for deep analysis
-4. **Flexibility**: Use separately during development or together in pipelines
-5. **Industry Standard**: Common pattern used by major projects (ESLint, Prettier, TypeScript)
+2. **Technical Assurance**: Validation tests ensure schemas meet JSON Schema standards
+3. **Quality Standards**: Quality tests enforce documentation and maintainability best practices
+4. **Automation Integration**: Jest tests integrate seamlessly with CI/CD systems
+5. **Gradual Validation**: From quick checks to deep quality analysis
+6. **Industry Standard**: Layered testing pattern used by major projects
 
 ### Example Workflow
 
 ```bash
 # During development
-npm run validate              # Quick check
+npm run validate              # Quick visual check
 
 # Before committing
-npm run validate && git commit
+npm run validate && \
+npm run test:schemas && \
+git commit
+
+# Code review process
+npm run test:schema-quality   # Comprehensive quality checks
 
 # In CI/CD pipeline
 npm run validate              # Fast gate check
-npm run test:schemas          # Detailed validation
+npm run test                  # All tests including quality
 ```
 
 ## What is Tested
 
-### 1. File Structure
+### Basic Validation (`npm run test:schemas`)
+
+#### 1. File Structure
 
 - ✅ Valid JSON syntax
 - ✅ Presence of required fields:
@@ -110,20 +128,58 @@ npm run test:schemas          # Detailed validation
   - `title` (schema name)
   - `description` (schema description)
 
-### 2. Meta-Validation
+#### 2. Meta-Validation
 
 - ✅ Compliance with JSON Schema draft-2020-12
 - ✅ Correct data types
 - ✅ Proper keyword syntax
 
-### 3. $ref Links
+#### 3. $ref Links
 
 - ✅ All local `$ref` links exist
 - ✅ File paths are correct
 
+### Quality Standards (`npm run test:schema-quality`)
+
+#### 📝 Metadata Requirements
+
+- ✅ All required metadata fields present
+- ✅ Examples provided for enum schemas
+- ✅ Correct schema version usage
+
+#### 🎯 Structure Consistency
+
+- ✅ Consistent `$id` pattern formatting
+- ✅ Enum schemas follow standard structure
+- ✅ Type schemas follow standard structure
+
+#### 🏷️ displayName and Custom Properties
+
+- ✅ `displayName` present for complex enums
+- ✅ Proper custom field patterns (x- prefix support)
+
+#### 🔗 $ref Link Validation
+
+- ✅ All `$ref` links are valid and resolvable
+- ✅ Cross-references work within project
+
+#### 📚 Documentation Readiness
+
+- ✅ All properties have descriptive documentation
+- ✅ Meaningful enum descriptions (>20 characters)
+- ✅ All enum values properly documented
+
+#### 🎨 Style and Formatting
+
+- ✅ Naming conventions followed (PascalCase titles)
+- ✅ Proper JSON formatting and indentation
+- ✅ Descriptions end with periods
+
 ## Error Examples and Solutions
 
-### Missing Required Field
+### Basic Validation Errors
+
+#### Missing Required Field
 
 **Error:**
 
@@ -139,13 +195,13 @@ npm run test:schemas          # Detailed validation
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/my_enum.json",
   "title": "MyEnum", // ← add this
-  "description": "Description of my enum",
+  "description": "Description of my enum.",
   "type": "string",
   "enum": ["value1", "value2"]
 }
 ```
 
-### Incorrect Schema Version
+#### Incorrect Schema Version
 
 **Error:**
 
@@ -162,37 +218,81 @@ Expected $schema to be 'https://json-schema.org/draft/2020-12/schema', got 'http
 }
 ```
 
-### Broken $ref Link
+### Quality Standard Errors
+
+#### Missing displayName for Complex Enums
 
 **Error:**
 
 ```
-$ref link not found: schema/components/nonexistent_enum.json
-```
-
-**Solution:**
-
-1. Create the missing file
-2. Or fix the path in `$ref`
-
-### Invalid JSON Schema Syntax
-
-**Error:**
-
-```
-root: must have property 'type'
+✕ schema/components/my_enum.json should have displayName for complex enums
 ```
 
 **Solution:**
 
 ```json
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "...",
-  "title": "...",
-  "description": "...",
-  "type": "string", // ← add required property
-  "enum": ["value1", "value2"]
+  "oneOf": [
+    {
+      "const": "value1",
+      "displayName": "Value One" // ← add this
+    },
+    {
+      "const": "value2",
+      "displayName": "Value Two" // ← add this
+    }
+  ]
+}
+```
+
+#### Description Quality Issues
+
+**Error:**
+
+```
+✕ schema/components/my_enum.json should have meaningful enum descriptions
+```
+
+**Solution:**
+
+```json
+{
+  "title": "MyEnum",
+  "description": "A comprehensive enumeration of valid values for my specific use case." // ← make it >20 chars and end with period
+}
+```
+
+#### Missing Examples
+
+**Error:**
+
+```
+✕ schema/components/my_enum.json should have examples where appropriate
+```
+
+**Solution:**
+
+```json
+{
+  "type": "string",
+  "enum": ["value1", "value2"],
+  "examples": ["value1", "value2"] // ← add this
+}
+```
+
+#### Incorrect $id Pattern
+
+**Error:**
+
+```
+✕ schema/components/my_enum.json should have consistent $id pattern
+```
+
+**Solution:**
+
+```json
+{
+  "$id": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/my_enum.json" // ← use correct pattern
 }
 ```
 
@@ -212,7 +312,7 @@ The validator uses AJV with these settings:
 
 ## CI/CD Integration
 
-Add schema validation to your CI pipeline:
+Add comprehensive schema validation to your CI pipeline:
 
 ```yaml
 # .github/workflows/test.yml
@@ -227,48 +327,154 @@ jobs:
         with:
           node-version: "18"
       - run: npm ci
+      - run: npm run validate # Quick validation
+      - run: npm run test:schemas # Technical validation
+      - run: npm run test:schema-quality # Quality standards
+```
+
+### Staged Pipeline (Recommended)
+
+For faster feedback, consider a staged approach:
+
+```yaml
+jobs:
+  quick-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+      - run: npm ci
       - run: npm run validate
-      - run: npm run test:schemas
+
+  comprehensive-test:
+    needs: quick-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+      - run: npm ci
+      - run: npm test # All tests including quality
 ```
 
 ## Adding New Schemas
 
-When creating a new schema, make sure that:
+When creating a new schema, follow these quality standards:
 
-1. **File has the correct structure:**
+### 1. Basic Structure Requirements
 
 ```json
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/path/to/your_schema.json",
   "title": "YourSchemaName",
-  "description": "Clear description of what this schema validates",
-  "type": "string|object|array"
+  "description": "Clear, detailed description ending with a period.",
+  "type": "string|object|array",
+  "examples": ["example1", "example2"] // Required for enums
   // ... your schema
 }
 ```
 
-2. **Run validation:**
+### 2. Quality Standards Checklist
+
+- ✅ **Title**: PascalCase, descriptive
+- ✅ **Description**: >20 characters, ends with period
+- ✅ **Examples**: Provided for all enum schemas
+- ✅ **displayName**: Added to all oneOf const values
+- ✅ **$id**: Uses correct GitHub raw URL pattern
+- ✅ **Properties**: All have meaningful descriptions >5 characters
+
+### 3. For Enum Schemas
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/my_enum.json",
+  "title": "MyEnum",
+  "description": "A comprehensive enumeration of valid values for specific use case.",
+  "type": "string",
+  "oneOf": [
+    {
+      "const": "value1",
+      "displayName": "Display Name One"
+    },
+    {
+      "const": "value2",
+      "displayName": "Display Name Two"
+    }
+  ],
+  "examples": ["value1", "value2"]
+}
+```
+
+### 4. Validation Steps
 
 ```bash
+# Step 1: Quick check
 npm run validate
-```
 
-3. **Check tests:**
-
-```bash
+# Step 2: Technical validation
 npm run test:schemas
+
+# Step 3: Quality validation
+npm run test:schema-quality
+
+# Step 4: Full test suite
+npm test
 ```
+
+### 5. Common Quality Issues to Avoid
+
+- ❌ Short descriptions (<20 chars)
+- ❌ Missing examples for enums
+- ❌ Missing displayName for oneOf const
+- ❌ Incorrect $id pattern
+- ❌ Descriptions not ending with periods
 
 ## Debugging
 
-For detailed error analysis, use Jest tests:
+### For Basic Validation Issues
 
 ```bash
 npm run test:schemas -- --verbose
 ```
 
-This will show detailed information about each test and error.
+### For Quality Standard Issues
+
+```bash
+npm run test:schema-quality -- --verbose
+```
+
+### For Specific Schema Debugging
+
+```bash
+# Test only one file
+npm run test:schema-quality -- --testNamePattern="schema/components/my_enum.json"
+
+# Show all error details
+npm run test:schema-quality -- --verbose --no-coverage
+```
+
+### Common Debugging Commands
+
+```bash
+# Quick visual check
+npm run validate
+
+# Detailed technical validation
+npm run test:schemas -- --verbose
+
+# Comprehensive quality analysis
+npm run test:schema-quality -- --verbose
+
+# All tests with maximum detail
+npm test -- --verbose --detectOpenHandles
+```
+
+This will show detailed information about each test, error messages, and quality violations.
 
 ## Useful Links
 
