@@ -4,35 +4,43 @@ const fs = require("fs")
 const path = require("path")
 const glob = require("glob")
 
+// Utility function for traversing objects with circular reference protection
+function traverseObject(obj, callback, visited = new WeakSet(), currentPath = "") {
+  if (typeof obj !== "object" || obj === null) return
+
+  // Prevent infinite recursion
+  if (visited.has(obj)) return
+  visited.add(obj)
+
+  // Apply callback to current object
+  callback(obj, currentPath)
+
+  // Recursively traverse nested objects
+  for (const key in obj) {
+    if (typeof obj[key] === "object") {
+      const newPath = currentPath ? `${currentPath}.${key}` : key
+      traverseObject(obj[key], callback, visited, newPath)
+    }
+  }
+}
+
 describe("JSON Schema Quality Check", () => {
   let ajv
   const schemaFiles = glob.sync("schema/**/*.json")
   const schemaCache = new Map()
 
-  // Parse and validate schemas immediately for test.each()
-  const cachedSchemas = schemaFiles.map(filePath => {
-    const schema = JSON.parse(fs.readFileSync(filePath, "utf8"))
-
-    // Basic schema validation
-    if (typeof schema !== "object" || schema === null || Array.isArray(schema)) {
-      throw new Error(`Invalid schema structure at ${filePath}: must be an object`)
-    }
-
-    // Check required JSON Schema fields
-    const requiredFields = ["$schema", "$id", "type", "title", "description"]
-    requiredFields.forEach(field => {
-      if (!schema[field]) {
-        throw new Error(`Missing required field '${field}' in schema at ${filePath}`)
+  // Parse schemas defensively for test.each() - validation moved to tests
+  const cachedSchemas = schemaFiles
+    .map(filePath => {
+      try {
+        const schema = JSON.parse(fs.readFileSync(filePath, "utf8"))
+        return { filePath, schema }
+      } catch (error) {
+        // Return placeholder - validation will be done in test blocks
+        return { filePath, schema: null, error: error.message }
       }
     })
-
-    // Validate $schema format
-    if (!schema.$schema.startsWith("https://json-schema.org/draft/")) {
-      throw new Error(`Invalid $schema format in ${filePath}`)
-    }
-
-    return { filePath, schema }
-  })
+    .filter(item => item.schema !== null) // Only include valid schemas for test.each()
 
   beforeAll(() => {
     ajv = new Ajv({
@@ -44,7 +52,29 @@ describe("JSON Schema Quality Check", () => {
 
     // Store in cache for quick access
     cachedSchemas.forEach(({ filePath, schema }) => {
-      schemaCache.set(filePath, schema)
+      if (schema) {
+        schemaCache.set(filePath, schema)
+      }
+    })
+  })
+
+  describe("📋 Schema Structure Validation", () => {
+    test.each(schemaFiles)("validate schema structure for %s", filePath => {
+      const schema = JSON.parse(fs.readFileSync(filePath, "utf8"))
+
+      // Basic schema validation
+      expect(typeof schema).toBe("object")
+      expect(schema).not.toBeNull()
+      expect(Array.isArray(schema)).toBe(false)
+
+      // Check required JSON Schema fields
+      const requiredFields = ["$schema", "$id", "type", "title", "description"]
+      requiredFields.forEach(field => {
+        expect(schema[field]).toBeDefined()
+      })
+
+      // Validate $schema format
+      expect(schema.$schema).toMatch(/^https:\/\/json-schema\.org\/draft\//)
     })
   })
 
@@ -114,7 +144,7 @@ describe("JSON Schema Quality Check", () => {
         const schema = schemaCache.get(filePath)
 
         // Type schemas should have 'type': 'object' or be more complex
-        expect(schema.type === "object" || schema.oneOf || schema.anyOf).toBe(true)
+        expect(schema.type === "object" || schema.oneOf || schema.anyOf).toBeTruthy()
 
         // Should have properties defined if it's an object
         if (schema.type === "object") {
@@ -145,28 +175,15 @@ describe("JSON Schema Quality Check", () => {
     test.each(cachedSchemas)(
       "%s should have proper custom field patterns",
       ({ filePath, schema }) => {
-        function checkCustomPatterns(obj, visited = new WeakSet()) {
-          if (typeof obj !== "object" || obj === null) return
-
-          // Prevent infinite recursion
-          if (visited.has(obj)) return
-          visited.add(obj)
-
+        function handleCustomPatterns(obj) {
           if (obj.custom) {
             expect(obj.custom.patternProperties).toBeDefined()
             expect(obj.custom.patternProperties["^x-"]).toBeDefined()
             expect(obj.custom.additionalProperties).toBe(false)
           }
-
-          // Recursively check nested objects
-          for (const key in obj) {
-            if (typeof obj[key] === "object") {
-              checkCustomPatterns(obj[key], visited)
-            }
-          }
         }
 
-        checkCustomPatterns(schema)
+        traverseObject(schema, handleCustomPatterns)
       }
     )
   })
@@ -223,13 +240,7 @@ describe("JSON Schema Quality Check", () => {
 
   describe("📚 Documentation Readiness", () => {
     test.each(cachedSchemas)("%s should have descriptive properties", ({ filePath, schema }) => {
-      function checkDescriptions(obj, path = "", visited = new WeakSet()) {
-        if (typeof obj !== "object" || obj === null) return
-
-        // Prevent infinite recursion
-        if (visited.has(obj)) return
-        visited.add(obj)
-
+      function handleDescriptions(obj, path = "") {
         if (obj.properties) {
           for (const [propName, propSchema] of Object.entries(obj.properties)) {
             if (propName !== "custom" && typeof propSchema === "object") {
@@ -245,6 +256,18 @@ describe("JSON Schema Quality Check", () => {
             }
           }
         }
+      }
+
+      // Use custom traversal for this case because we need to skip certain keys
+      function traverseWithSkips(obj, callback, visited = new WeakSet(), currentPath = "") {
+        if (typeof obj !== "object" || obj === null) return
+
+        // Prevent infinite recursion
+        if (visited.has(obj)) return
+        visited.add(obj)
+
+        // Apply callback to current object
+        callback(obj, currentPath)
 
         // Skip checking inside if/then/else blocks and other structural elements
         const skipKeys = new Set([
@@ -263,12 +286,13 @@ describe("JSON Schema Quality Check", () => {
         // Recursively check nested objects
         for (const key in obj) {
           if (typeof obj[key] === "object" && !skipKeys.has(key)) {
-            checkDescriptions(obj[key], path ? `${path}.${key}` : key, visited)
+            const newPath = currentPath ? `${currentPath}.${key}` : key
+            traverseWithSkips(obj[key], callback, visited, newPath)
           }
         }
       }
 
-      checkDescriptions(schema)
+      traverseWithSkips(schema, handleDescriptions)
     })
 
     test.each(cachedSchemas)(

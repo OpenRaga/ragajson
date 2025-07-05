@@ -38,6 +38,9 @@ npm run validate
 
 # Run comprehensive tests (214 tests)
 npm test
+
+# Run quality checks specifically (158 tests)
+npm run test:schema-quality
 ```
 
 **All schemas are validated with:**
