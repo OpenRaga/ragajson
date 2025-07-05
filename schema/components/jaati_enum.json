@@ -7,38 +7,47 @@
   "oneOf": [
     {
       "const": "Audava-Audava",
+      "displayName": "Audava-Audava",
       "description": "5 notes in aroha, 5 notes in avaroha"
     },
     {
       "const": "Audava-Shadava",
+      "displayName": "Audava-Shadava",
       "description": "5 notes in aroha, 6 notes in avaroha"
     },
     {
       "const": "Audava-Sampurna",
+      "displayName": "Audava-Sampurna",
       "description": "5 notes in aroha, 7 notes in avaroha"
     },
     {
       "const": "Shadava-Audava",
+      "displayName": "Shadava-Audava",
       "description": "6 notes in aroha, 5 notes in avaroha"
     },
     {
       "const": "Shadava-Shadava",
+      "displayName": "Shadava-Shadava",
       "description": "6 notes in aroha, 6 notes in avaroha"
     },
     {
       "const": "Shadava-Sampurna",
+      "displayName": "Shadava-Sampurna",
       "description": "6 notes in aroha, 7 notes in avaroha"
     },
     {
       "const": "Sampurna-Audava",
+      "displayName": "Sampurna-Audava",
       "description": "7 notes in aroha, 5 notes in avaroha"
     },
     {
       "const": "Sampurna-Shadava",
+      "displayName": "Sampurna-Shadava",
       "description": "7 notes in aroha, 6 notes in avaroha"
     },
     {
       "const": "Sampurna-Sampurna",
+      "displayName": "Sampurna-Sampurna",
       "description": "7 notes in aroha, 7 notes in avaroha"
     }
   ],

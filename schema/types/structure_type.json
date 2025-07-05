@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/types/structure_type.json",
   "title": "StructureType",
-  "description": "Structural parameters of a raga (e.g., aroha, avaroha, svaras, etc.)",
+  "description": "Structural parameters of a raga (e.g., aroha, avaroha, svaras, etc.).",
   "type": "object",
   "properties": {
     "aroha": {

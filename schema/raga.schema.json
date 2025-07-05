@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/raga.schema.json",
   "title": "RagaJSON Schema",
-  "description": "Machine-readable schema for describing ragas of Indian classical music",
+  "description": "Machine-readable schema for describing ragas of Indian classical music.",
   "type": "object",
   "properties": {
     "name": {
@@ -10,20 +10,24 @@
       "description": "Raga name"
     },
     "system": {
-      "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/system_enum.json"
+      "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/system_enum.json",
+      "description": "Indian classical music system (Hindustani or Carnatic)."
     },
     "classification": {
       "type": "string",
       "description": "Raga classification"
     },
     "structure": {
-      "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/types/structure_type.json"
+      "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/types/structure_type.json",
+      "description": "Structural parameters of the raga (notes, patterns, etc.)."
     },
     "performance": {
-      "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/types/performance_type.json"
+      "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/types/performance_type.json",
+      "description": "Performance-related information (time, season, rasa, etc.)."
     },
     "examples": {
-      "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/types/examples_type.json"
+      "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/types/examples_type.json",
+      "description": "Audio, video, and composition examples of the raga."
     },
     "custom": {
       "type": "object",

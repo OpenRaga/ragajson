@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/types/performance_type.json",
   "title": "PerformanceType",
-  "description": "Raga performance parameters (form, tempo, time of day, etc.)",
+  "description": "Raga performance parameters (form, tempo, time of day, etc.).",
   "type": "object",
   "properties": {
     "form": {

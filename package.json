@@ -8,7 +8,8 @@
     "format:json": "prettier --write \"**/*.json\"",
     "validate": "node scripts/validate-schemas.js",
     "test": "jest",
-    "test:schemas": "jest tests/schema-validation.test.js"
+    "test:schemas": "jest tests/schema-validation.test.js",
+    "test:quality": "jest tests/schema-quality.test.js"
   },
   "devDependencies": {
     "ajv": "^8.17.1",

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/types/rasa_entry_type.json",
   "title": "RasaEntryType",
-  "description": "Rasa entry with weight (intensity)",
+  "description": "Rasa entry with weight (intensity).",
   "type": "object",
   "properties": {
     "rasa": {
