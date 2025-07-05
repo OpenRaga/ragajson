@@ -83,14 +83,7 @@ describe("JSON Schema Quality Check", () => {
     test.each(cachedSchemas)(
       "%s should have all required metadata fields",
       ({ filePath, schema }) => {
-        // Required fields
-        expect(schema.$schema).toBeDefined()
-        expect(schema.$id).toBeDefined()
-        expect(schema.title).toBeDefined()
-        expect(schema.description).toBeDefined()
-        expect(schema.type).toBeDefined()
-
-        // Metadata quality check
+        // Metadata quality check (required fields already validated in structure validation)
         expect(schema.title).toMatch(/^[A-Z][a-zA-Z\s]*$/) // Allow spaces
         expect(schema.description.length).toBeGreaterThan(10) // Detailed description
         expect(schema.description).toMatch(/^[A-Z]/) // Starts with capital letter
@@ -117,10 +110,11 @@ describe("JSON Schema Quality Check", () => {
       expect(schema.$id).toBe(expectedId)
     })
 
-    test("enum schemas should have consistent structure", () => {
-      const enumFiles = schemaFiles.filter(file => file.includes("_enum.json"))
-
-      enumFiles.forEach(filePath => {
+    // Parameterized tests for better error tracing
+    const enumFiles = schemaFiles.filter(file => file.includes("_enum.json"))
+    test.each(enumFiles)(
+      "%s should have consistent enum structure",
+      (filePath) => {
         const schema = schemaCache.get(filePath)
 
         // Enum schemas should have either 'enum' or 'oneOf'
@@ -128,13 +122,13 @@ describe("JSON Schema Quality Check", () => {
 
         // Should have type string
         expect(schema.type).toBe("string")
-      })
-    })
+      }
+    )
 
-    test("type schemas should have consistent structure", () => {
-      const typeFiles = schemaFiles.filter(file => file.includes("_type.json"))
-
-      typeFiles.forEach(filePath => {
+    const typeFiles = schemaFiles.filter(file => file.includes("_type.json"))
+    test.each(typeFiles)(
+      "%s should have consistent type structure",
+      (filePath) => {
         const schema = schemaCache.get(filePath)
 
         // Type schemas should have 'type': 'object' or be more complex
@@ -145,8 +139,8 @@ describe("JSON Schema Quality Check", () => {
           expect(schema.properties).toBeDefined()
           expect(typeof schema.properties).toBe("object")
         }
-      })
-    })
+      }
+    )
   })
 
   describe("🏷️ displayName and Custom Properties", () => {
@@ -353,10 +347,10 @@ describe("JSON Schema Quality Check", () => {
 })
 
 // Utility functions
-function extractRefs(obj, refs = []) {
+function extractRefs(obj, refs = new Set()) {
   if (typeof obj === "object" && obj !== null) {
     if (obj.$ref && typeof obj.$ref === "string") {
-      refs.push(obj.$ref)
+      refs.add(obj.$ref)
     }
 
     for (const key in obj) {
@@ -366,5 +360,5 @@ function extractRefs(obj, refs = []) {
     }
   }
 
-  return refs
+  return Array.from(refs)
 }
