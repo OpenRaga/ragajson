@@ -15,7 +15,7 @@ Raga information is scattered across books, websites, and oral traditions with n
 ## Who Uses This
 
 - **Developers**: Build music apps with structured raga data
-- **Researchers**: Analyze ragas systematically  
+- **Researchers**: Analyze ragas systematically
 - **Musicians**: Access comprehensive raga information
 - **AI/ML**: Train models on cultural musical data
 
@@ -27,14 +27,12 @@ Raga information is scattered across books, websites, and oral traditions with n
 - **Flexibility**: Support for both Hindustani and Carnatic systems
 - **Extensibility**: Custom fields allowed with `x-` prefix
 
-
 ## Documentation
 
 - [Schema Reference](docs/) - Technical details
 - [Testing Guide](docs/testing-guide.md) - Validation tools
-- [Examples](examples/) - Real raga data *(coming soon)*
+- [Examples](examples/) - Real raga data _(coming soon)_
 
-
-*Made with love for the global Indian classical music community*
+_Made with love for the global Indian classical music community_
 
 Copyright © 2025 OpenRaga Contributors

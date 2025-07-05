@@ -15,7 +15,23 @@
     "editor.formatOnSave": true,
     "editor.tabSize": 2
   },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.wordWrap": "on"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2
+  },
   "files.associations": {
     "*.schema.json": "json"
-  }
+  },
+  "json.schemas": [
+    {
+      "fileMatch": ["schema/**/*.json"],
+      "url": "https://json-schema.org/draft/2020-12/schema"
+    }
+  ]
 }
