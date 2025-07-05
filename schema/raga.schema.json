@@ -7,7 +7,7 @@
   "properties": {
     "name": {
       "type": "string",
-      "description": "Raga name"
+      "description": "Raga name."
     },
     "system": {
       "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/system_enum.json",

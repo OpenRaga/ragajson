@@ -73,7 +73,7 @@ describe("JSON Schema Quality Check", () => {
       const enumFiles = schemaFiles.filter(file => file.includes("_enum.json"))
       
       enumFiles.forEach(filePath => {
-        const schema = JSON.parse(fs.readFileSync(filePath, "utf8"))
+        const schema = schemaCache.get(filePath)
         
         // Enum schemas should have either 'enum' or 'oneOf'
         expect(schema.enum || schema.oneOf).toBeDefined()
@@ -90,7 +90,7 @@ describe("JSON Schema Quality Check", () => {
       const typeFiles = schemaFiles.filter(file => file.includes("_type.json"))
       
       typeFiles.forEach(filePath => {
-        const schema = JSON.parse(fs.readFileSync(filePath, "utf8"))
+        const schema = schemaCache.get(filePath)
         
         // Type schemas should have 'type': 'object' or be more complex
         expect(schema.type === "object" || schema.oneOf || schema.anyOf).toBe(true)
@@ -172,7 +172,7 @@ describe("JSON Schema Quality Check", () => {
       const allRefs = new Set()
       
       schemaFiles.forEach(filePath => {
-        const schema = JSON.parse(fs.readFileSync(filePath, "utf8"))
+        const schema = schemaCache.get(filePath)
         const refs = extractRefs(schema)
         refs.forEach(ref => allRefs.add(ref))
       })
@@ -258,7 +258,7 @@ describe("JSON Schema Quality Check", () => {
       const enumFiles = schemaFiles.filter(file => file.includes("_enum.json"))
       
       enumFiles.forEach(filePath => {
-        const schema = JSON.parse(fs.readFileSync(filePath, "utf8"))
+        const schema = schemaCache.get(filePath)
         
         if (schema.enum) {
           // Check that all enum values are in examples
@@ -315,7 +315,7 @@ function extractRefs(obj, refs = []) {
     }
 
     for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
         extractRefs(obj[key], refs)
       }
     }
