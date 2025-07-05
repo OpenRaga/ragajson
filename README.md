@@ -36,17 +36,17 @@ npm install
 # Quick validation with visual feedback
 npm run validate
 
-# Run comprehensive tests (228 tests)
+# Run comprehensive tests
 npm test
 
-# Run quality checks specifically (158 tests)
+# Run quality checks specifically
 npm run test:schema-quality
 ```
 
 **All schemas are validated with:**
 
-- ✅ 70 technical compliance tests
-- ✅ 158 quality standard tests
+- ✅ Technical compliance tests
+- ✅ Quality standard tests
 - ✅ Real-time validation feedback
 
 ## Documentation
