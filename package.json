@@ -9,7 +9,7 @@
     "validate": "node scripts/validate-schemas.js",
     "test": "jest",
     "test:schemas": "jest tests/schema-validation.test.js",
-    "test:quality": "jest tests/schema-quality.test.js"
+    "test:schema-quality": "jest tests/schema-quality.test.js"
   },
   "devDependencies": {
     "ajv": "^8.17.1",

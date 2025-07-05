@@ -7,6 +7,13 @@ const glob = require("glob")
 describe("JSON Schema Quality Check", () => {
   let ajv
   const schemaFiles = glob.sync("schema/**/*.json")
+  const schemaCache = new Map()
+  
+  // Create cached schemas immediately
+  const cachedSchemas = schemaFiles.map(filePath => ({
+    filePath,
+    schema: JSON.parse(fs.readFileSync(filePath, "utf8"))
+  }))
 
   beforeAll(() => {
     ajv = new Ajv({
@@ -15,11 +22,15 @@ describe("JSON Schema Quality Check", () => {
       validateSchema: false
     })
     addFormats(ajv)
+    
+    // Store in cache for quick access
+    cachedSchemas.forEach(({filePath, schema}) => {
+      schemaCache.set(filePath, schema)
+    })
   })
 
   describe("📝 Metadata Requirements", () => {
-    test.each(schemaFiles)("%s should have all required metadata fields", filePath => {
-      const schema = JSON.parse(fs.readFileSync(filePath, "utf8"))
+    test.each(cachedSchemas)("%s should have all required metadata fields", ({ filePath, schema }) => {
       
       // Required fields
       expect(schema.$schema).toBeDefined()
@@ -35,8 +46,7 @@ describe("JSON Schema Quality Check", () => {
       expect(schema.description).toMatch(/\.$/) // Ends with period
     })
 
-    test.each(schemaFiles)("%s should have examples where appropriate", filePath => {
-      const schema = JSON.parse(fs.readFileSync(filePath, "utf8"))
+    test.each(cachedSchemas)("%s should have examples where appropriate", ({ filePath, schema }) => {
       
       // Enum schemas should have examples
       if (schema.enum || schema.oneOf) {
@@ -46,16 +56,14 @@ describe("JSON Schema Quality Check", () => {
       }
     })
 
-    test.each(schemaFiles)("%s should use correct schema version", filePath => {
-      const schema = JSON.parse(fs.readFileSync(filePath, "utf8"))
+    test.each(cachedSchemas)("%s should use correct schema version", ({ filePath, schema }) => {
       
       expect(schema.$schema).toBe("https://json-schema.org/draft/2020-12/schema")
     })
   })
 
   describe("🎯 Structure Consistency", () => {
-    test.each(schemaFiles)("%s should have consistent $id pattern", filePath => {
-      const schema = JSON.parse(fs.readFileSync(filePath, "utf8"))
+    test.each(cachedSchemas)("%s should have consistent $id pattern", ({ filePath, schema }) => {
       
       const expectedId = `https://raw.githubusercontent.com/OpenRaga/ragajson/main/${filePath}`
       expect(schema.$id).toBe(expectedId)
@@ -97,8 +105,7 @@ describe("JSON Schema Quality Check", () => {
   })
 
   describe("🏷️ displayName and Custom Properties", () => {
-    test.each(schemaFiles)("%s should have displayName for complex enums", filePath => {
-      const schema = JSON.parse(fs.readFileSync(filePath, "utf8"))
+    test.each(cachedSchemas)("%s should have displayName for complex enums", ({ filePath, schema }) => {
       
       // If there's oneOf with const, displayName should be present
       if (schema.oneOf && Array.isArray(schema.oneOf)) {
@@ -112,11 +119,14 @@ describe("JSON Schema Quality Check", () => {
       }
     })
 
-    test.each(schemaFiles)("%s should have proper custom field patterns", filePath => {
-      const schema = JSON.parse(fs.readFileSync(filePath, "utf8"))
+    test.each(cachedSchemas)("%s should have proper custom field patterns", ({ filePath, schema }) => {
       
-      function checkCustomPatterns(obj) {
+      function checkCustomPatterns(obj, visited = new WeakSet()) {
         if (typeof obj !== "object" || obj === null) return
+        
+        // Prevent infinite recursion
+        if (visited.has(obj)) return
+        visited.add(obj)
         
         if (obj.custom) {
           expect(obj.custom.patternProperties).toBeDefined()
@@ -127,7 +137,7 @@ describe("JSON Schema Quality Check", () => {
         // Recursively check nested objects
         for (const key in obj) {
           if (typeof obj[key] === "object") {
-            checkCustomPatterns(obj[key])
+            checkCustomPatterns(obj[key], visited)
           }
         }
       }
@@ -137,15 +147,15 @@ describe("JSON Schema Quality Check", () => {
   })
 
   describe("🔗 $ref Link Validation", () => {
-    test.each(schemaFiles)("%s should have valid $ref links", filePath => {
-      const schema = JSON.parse(fs.readFileSync(filePath, "utf8"))
+    test.each(cachedSchemas)("%s should have valid $ref links", ({ filePath, schema }) => {
       const refs = extractRefs(schema)
       
       refs.forEach(ref => {
         if (ref.startsWith("https://raw.githubusercontent.com/OpenRaga/ragajson/main/")) {
-          const localPath = ref.replace(
-            "https://raw.githubusercontent.com/OpenRaga/ragajson/main/",
-            ""
+          const localPath = path.resolve(
+            __dirname,
+            "..",
+            ref.replace("https://raw.githubusercontent.com/OpenRaga/ragajson/main/", "")
           )
           
           expect(fs.existsSync(localPath)).toBe(true)
@@ -169,23 +179,32 @@ describe("JSON Schema Quality Check", () => {
       
       allRefs.forEach(ref => {
         if (ref.startsWith("https://raw.githubusercontent.com/OpenRaga/ragajson/main/")) {
-          const localPath = ref.replace(
-            "https://raw.githubusercontent.com/OpenRaga/ragajson/main/",
-            ""
+          const localPath = path.resolve(
+            __dirname,
+            "..",
+            ref.replace("https://raw.githubusercontent.com/OpenRaga/ragajson/main/", "")
           )
           
           expect(fs.existsSync(localPath)).toBe(true)
+          
+          // Check that file is valid JSON
+          expect(() => {
+            JSON.parse(fs.readFileSync(localPath, "utf8"))
+          }).not.toThrow()
         }
       })
     })
   })
 
   describe("📚 Documentation Readiness", () => {
-    test.each(schemaFiles)("%s should have descriptive properties", filePath => {
-      const schema = JSON.parse(fs.readFileSync(filePath, "utf8"))
+    test.each(cachedSchemas)("%s should have descriptive properties", ({ filePath, schema }) => {
       
-      function checkDescriptions(obj, path = "") {
+      function checkDescriptions(obj, path = "", visited = new WeakSet()) {
         if (typeof obj !== "object" || obj === null) return
+        
+        // Prevent infinite recursion
+        if (visited.has(obj)) return
+        visited.add(obj)
         
         if (obj.properties) {
           for (const [propName, propSchema] of Object.entries(obj.properties)) {
@@ -195,10 +214,6 @@ describe("JSON Schema Quality Check", () => {
               // Skip checking descriptions for properties that only have $ref
               if (propSchema.$ref && !propSchema.description) {
                 continue
-              }
-              
-              if (!propSchema.description) {
-                throw new Error(`Property ${currentPath} missing description`)
               }
               
               expect(propSchema.description).toBeDefined()
@@ -213,7 +228,7 @@ describe("JSON Schema Quality Check", () => {
         // Recursively check nested objects
         for (const key in obj) {
           if (typeof obj[key] === "object" && !skipKeys.has(key)) {
-            checkDescriptions(obj[key], path ? `${path}.${key}` : key)
+            checkDescriptions(obj[key], path ? `${path}.${key}` : key, visited)
           }
         }
       }
@@ -221,8 +236,7 @@ describe("JSON Schema Quality Check", () => {
       checkDescriptions(schema)
     })
 
-    test.each(schemaFiles)("%s should have meaningful enum descriptions", filePath => {
-      const schema = JSON.parse(fs.readFileSync(filePath, "utf8"))
+    test.each(cachedSchemas)("%s should have meaningful enum descriptions", ({ filePath, schema }) => {
       
       if (schema.enum) {
         // Simple enums should have detailed descriptions
@@ -263,8 +277,7 @@ describe("JSON Schema Quality Check", () => {
   })
 
   describe("🎨 Style and Formatting", () => {
-    test.each(schemaFiles)("%s should follow naming conventions", filePath => {
-      const schema = JSON.parse(fs.readFileSync(filePath, "utf8"))
+    test.each(cachedSchemas)("%s should follow naming conventions", ({ filePath, schema }) => {
       
       // Title should be PascalCase
       expect(schema.title).toMatch(/^[A-Z][a-zA-Z\s]*$/)
@@ -282,7 +295,7 @@ describe("JSON Schema Quality Check", () => {
       }
     })
 
-    test.each(schemaFiles)("%s should have proper JSON formatting", filePath => {
+    test.each(cachedSchemas)("%s should have proper JSON formatting", ({ filePath }) => {
       const content = fs.readFileSync(filePath, "utf8")
       
       // Should be valid JSON

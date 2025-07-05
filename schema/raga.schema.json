@@ -15,7 +15,7 @@
     },
     "classification": {
       "type": "string",
-      "description": "Raga classification"
+      "description": "Raga classification."
     },
     "structure": {
       "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/types/structure_type.json",
