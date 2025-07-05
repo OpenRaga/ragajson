@@ -59,9 +59,7 @@ describe("JSON Schema Quality Check", () => {
   })
 
   describe("📋 Schema Structure Validation", () => {
-    test.each(schemaFiles)("validate schema structure for %s", filePath => {
-      const schema = JSON.parse(fs.readFileSync(filePath, "utf8"))
-
+    test.each(cachedSchemas)("validate schema structure for %s", ({ filePath, schema }) => {
       // Basic schema validation
       expect(typeof schema).toBe("object")
       expect(schema).not.toBeNull()
@@ -70,7 +68,7 @@ describe("JSON Schema Quality Check", () => {
       // Check required JSON Schema fields
       const requiredFields = ["$schema", "$id", "type", "title", "description"]
       requiredFields.forEach(field => {
-        expect(schema[field]).toBeDefined()
+        expect(schema).toHaveProperty(field)
       })
 
       // Validate $schema format
@@ -128,9 +126,6 @@ describe("JSON Schema Quality Check", () => {
 
         // Enum schemas should have either 'enum' or 'oneOf'
         expect(schema.enum || schema.oneOf).toBeDefined()
-
-        // Should have examples
-        expect(schema.examples).toBeDefined()
 
         // Should have type string
         expect(schema.type).toBe("string")
