@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "ms-vscode.vscode-json",
+    "davidanson.vscode-markdownlint",
+    "eamodio.gitlens",
+    "christian-kohler.path-intellisense",
+    "usernamehw.errorlens",
+    "orta.vscode-jest",
+    "ms-vscode.test-adapter-converter"
+  ],
+  "unwantedRecommendations": []
+} 
