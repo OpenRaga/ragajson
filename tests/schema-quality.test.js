@@ -112,35 +112,29 @@ describe("JSON Schema Quality Check", () => {
 
     // Parameterized tests for better error tracing
     const enumFiles = schemaFiles.filter(file => file.includes("_enum.json"))
-    test.each(enumFiles)(
-      "%s should have consistent enum structure",
-      (filePath) => {
-        const schema = schemaCache.get(filePath)
+    test.each(enumFiles)("%s should have consistent enum structure", filePath => {
+      const schema = schemaCache.get(filePath)
 
-        // Enum schemas should have either 'enum' or 'oneOf'
-        expect(schema.enum || schema.oneOf).toBeDefined()
+      // Enum schemas should have either 'enum' or 'oneOf'
+      expect(schema.enum || schema.oneOf).toBeDefined()
 
-        // Should have type string
-        expect(schema.type).toBe("string")
-      }
-    )
+      // Should have type string
+      expect(schema.type).toBe("string")
+    })
 
     const typeFiles = schemaFiles.filter(file => file.includes("_type.json"))
-    test.each(typeFiles)(
-      "%s should have consistent type structure",
-      (filePath) => {
-        const schema = schemaCache.get(filePath)
+    test.each(typeFiles)("%s should have consistent type structure", filePath => {
+      const schema = schemaCache.get(filePath)
 
-        // Type schemas should have 'type': 'object' or be more complex
-        expect(schema.type === "object" || schema.oneOf || schema.anyOf).toBeTruthy()
+      // Type schemas should have 'type': 'object' or be more complex
+      expect(schema.type === "object" || schema.oneOf || schema.anyOf).toBeTruthy()
 
-        // Should have properties defined if it's an object
-        if (schema.type === "object") {
-          expect(schema.properties).toBeDefined()
-          expect(typeof schema.properties).toBe("object")
-        }
+      // Should have properties defined if it's an object
+      if (schema.type === "object") {
+        expect(schema.properties).toBeDefined()
+        expect(typeof schema.properties).toBe("object")
       }
-    )
+    })
   })
 
   describe("🏷️ displayName and Custom Properties", () => {
@@ -199,7 +193,7 @@ describe("JSON Schema Quality Check", () => {
           // Validate local JSON Pointer refs within the same schema
           const pointer = ref.substring(2) // Remove '#/' prefix
           const parts = pointer.split("/")
-          
+
           let current = schema
           for (const part of parts) {
             expect(current).toHaveProperty(part)
