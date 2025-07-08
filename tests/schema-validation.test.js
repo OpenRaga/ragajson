@@ -56,13 +56,12 @@ describe("JSON Schema Meta-Validation", () => {
       const refs = extractRefs(schema)
 
       refs.forEach(ref => {
-        if (ref.startsWith("https://raw.githubusercontent.com/OpenRaga/ragajson/main/")) {
-          // Check local links
-          const localPath = ref.replace(
-            "https://raw.githubusercontent.com/OpenRaga/ragajson/main/",
-            ""
-          )
-          expect(fs.existsSync(localPath)).toBe(true)
+        if (ref.startsWith("./") || ref.startsWith("../")) {
+          // Resolve relative path from the current schema file's directory
+          const schemaDir = path.dirname(filePath)
+          const resolvedPath = path.resolve(schemaDir, ref)
+
+          expect(fs.existsSync(resolvedPath)).toBe(true)
         }
       })
     })

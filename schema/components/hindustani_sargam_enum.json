@@ -1,5 +1,5 @@
 {
-  "$id": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/hindustani_sargam_enum.json",
+  "$id": "hindustani_sargam_enum.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "HindustaniSargamEnum",
   "description": "Hindustani sargam notes using Bhatkhande notation. Machine‑friendly const values use ASCII UPPER_SNAKE; suffix _KOMAL denotes komal (flat) notes and _TIVRA denotes tivra (sharp). displayName follows Bhatkhande convention: uppercase = shuddha, lowercase = komal, 'Ma+' = tivra.",

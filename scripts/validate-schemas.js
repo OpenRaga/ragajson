@@ -4,6 +4,7 @@ const Ajv = require("ajv")
 const addFormats = require("ajv-formats")
 const fs = require("fs")
 const glob = require("glob")
+const path = require("path")
 
 class SchemaValidator {
   constructor() {
@@ -50,16 +51,16 @@ class SchemaValidator {
         result.valid = false
       }
 
-      // Check $ref links
+      // Check $ref links (now relative paths)
       const refs = this.extractRefs(schema)
       for (const ref of refs) {
-        if (ref.startsWith("https://raw.githubusercontent.com/OpenRaga/ragajson/main/")) {
-          const localPath = ref.replace(
-            "https://raw.githubusercontent.com/OpenRaga/ragajson/main/",
-            ""
-          )
-          if (!fs.existsSync(localPath)) {
-            result.errors.push(`$ref link not found: ${localPath}`)
+        if (ref.startsWith("./") || ref.startsWith("../")) {
+          // Resolve relative path from the current schema file's directory
+          const schemaDir = path.dirname(filePath)
+          const resolvedPath = path.resolve(schemaDir, ref)
+
+          if (!fs.existsSync(resolvedPath)) {
+            result.errors.push(`$ref link not found: ${ref} (resolved to: ${resolvedPath})`)
             result.valid = false
           }
         }

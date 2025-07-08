@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/types/examples_type.json",
+  "$id": "examples_type.json",
   "title": "ExamplesType",
   "description": "Examples of audio, video, and other media for a raga.",
   "type": "object",

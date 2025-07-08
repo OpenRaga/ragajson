@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/jaati_enum.json",
+  "$id": "jaati_enum.json",
   "title": "JaatiEnum",
   "description": "Classification by number of notes in aroha-avaroha patterns. Format: Aroha-Avaroha (e.g., Audava-Sampurna = 5 notes ascending, 7 notes descending). All forms use explicit aroha-avaroha notation for clarity.",
   "type": "string",

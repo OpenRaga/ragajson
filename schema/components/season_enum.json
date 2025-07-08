@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/season_enum.json",
+  "$id": "season_enum.json",
   "title": "SeasonEnum",
   "description": "Reference list for indicating the season or time of year traditionally associated with raga performance.",
   "type": "string",

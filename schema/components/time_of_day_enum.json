@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/time_of_day_enum.json",
+  "$id": "time_of_day_enum.json",
   "title": "TimeOfDayEnum",
   "description": "Time of day classifications for raga performance. Based on traditional Ashta Prahar system with modern equivalents.",
   "type": "string",

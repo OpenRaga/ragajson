@@ -206,7 +206,7 @@ npm run test                  # All tests including quality
 ```json
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/my_enum.json",
+  "$id": "my_enum.json",
   "title": "MyEnum", // ← add this
   "description": "Description of my enum.",
   "type": "string",
@@ -305,7 +305,7 @@ Expected $schema to be 'https://json-schema.org/draft/2020-12/schema', got 'http
 
 ```json
 {
-  "$id": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/my_enum.json" // ← use correct pattern
+  "$id": "my_enum.json" // ← use correct pattern (filename only)
 }
 ```
 
@@ -382,7 +382,7 @@ When creating a new schema, follow these quality standards:
 ```json
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/path/to/your_schema.json",
+  "$id": "your_schema.json",
   "title": "YourSchemaName",
   "description": "Clear, detailed description ending with a period.",
   "type": "string|object|array",
@@ -397,7 +397,7 @@ When creating a new schema, follow these quality standards:
 - ✅ **Description**: Meaningful, ends with period
 - ✅ **Examples**: Provided for all enum schemas
 - ✅ **displayName**: Added to all oneOf const values
-- ✅ **$id**: Uses correct GitHub raw URL pattern
+- ✅ **$id**: Uses correct filename pattern (e.g., "my_enum.json")
 - ✅ **Properties**: All have meaningful descriptions
 
 ### 3. For Enum Schemas
@@ -405,7 +405,7 @@ When creating a new schema, follow these quality standards:
 ```json
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/my_enum.json",
+  "$id": "my_enum.json",
   "title": "MyEnum",
   "description": "A comprehensive enumeration of valid values for specific use case.",
   "type": "string",

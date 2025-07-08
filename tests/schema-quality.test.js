@@ -106,7 +106,7 @@ describe("JSON Schema Quality Check", () => {
 
   describe("🎯 Structure Consistency", () => {
     test.each(cachedSchemas)("%s should have consistent $id pattern", ({ filePath, schema }) => {
-      const expectedId = `https://raw.githubusercontent.com/OpenRaga/ragajson/main/${filePath}`
+      const expectedId = path.basename(filePath)
       expect(schema.$id).toBe(expectedId)
     })
 
@@ -175,19 +175,16 @@ describe("JSON Schema Quality Check", () => {
       const refs = extractRefs(schema)
 
       refs.forEach(ref => {
-        if (ref.startsWith("https://raw.githubusercontent.com/OpenRaga/ragajson/main/")) {
-          // Validate remote GitHub raw URL refs
-          const localPath = path.resolve(
-            __dirname,
-            "..",
-            ref.replace("https://raw.githubusercontent.com/OpenRaga/ragajson/main/", "")
-          )
+        if (ref.startsWith("./") || ref.startsWith("../")) {
+          // Validate relative path refs
+          const schemaDir = path.dirname(filePath)
+          const resolvedPath = path.resolve(schemaDir, ref)
 
-          expect(fs.existsSync(localPath)).toBe(true)
+          expect(fs.existsSync(resolvedPath)).toBe(true)
 
           // Check that file is valid JSON
           expect(() => {
-            JSON.parse(fs.readFileSync(localPath, "utf8"))
+            JSON.parse(fs.readFileSync(resolvedPath, "utf8"))
           }).not.toThrow()
         } else if (ref.startsWith("#/")) {
           // Validate local JSON Pointer refs within the same schema
@@ -209,22 +206,19 @@ describe("JSON Schema Quality Check", () => {
       schemaFiles.forEach(filePath => {
         const schema = schemaCache.get(filePath)
         const refs = extractRefs(schema)
-        refs.forEach(ref => allRefs.add(ref))
+        refs.forEach(ref => allRefs.add({ ref, filePath }))
       })
 
-      allRefs.forEach(ref => {
-        if (ref.startsWith("https://raw.githubusercontent.com/OpenRaga/ragajson/main/")) {
-          const localPath = path.resolve(
-            __dirname,
-            "..",
-            ref.replace("https://raw.githubusercontent.com/OpenRaga/ragajson/main/", "")
-          )
+      allRefs.forEach(({ ref, filePath }) => {
+        if (ref.startsWith("./") || ref.startsWith("../")) {
+          const schemaDir = path.dirname(filePath)
+          const resolvedPath = path.resolve(schemaDir, ref)
 
-          expect(fs.existsSync(localPath)).toBe(true)
+          expect(fs.existsSync(resolvedPath)).toBe(true)
 
           // Check that file is valid JSON
           expect(() => {
-            JSON.parse(fs.readFileSync(localPath, "utf8"))
+            JSON.parse(fs.readFileSync(resolvedPath, "utf8"))
           }).not.toThrow()
         }
       })

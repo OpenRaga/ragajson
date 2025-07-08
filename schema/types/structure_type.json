@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/types/structure_type.json",
+  "$id": "structure_type.json",
   "title": "StructureType",
   "description": "Structural parameters of a raga (e.g., aroha, avaroha, svaras, etc.).",
   "type": "object",
@@ -32,7 +32,7 @@
       "description": "Pakad — characteristic melodic phrase of the raga"
     },
     "jaati": {
-      "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/jaati_enum.json",
+      "$ref": "../components/jaati_enum.json",
       "description": "Jaati — classification by number of notes (e.g., audav, shadav, sampurna, etc.)"
     },
     "varjit_svaras": {

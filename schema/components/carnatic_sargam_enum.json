@@ -1,5 +1,5 @@
 {
-  "$id": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/carnatic_sargam_enum.json",
+  "$id": "carnatic_sargam_enum.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "CarnaticSargamEnum",
   "description": "Carnatic sargam notes using numbered notation (swara-shrutis system). Each note can have multiple variants (shrutis) indicated by numbers.",

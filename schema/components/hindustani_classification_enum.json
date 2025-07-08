@@ -1,5 +1,5 @@
 {
-  "$id": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/hindustani_classification_enum.json",
+  "$id": "hindustani_classification_enum.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "HindustaniClassificationEnum",
   "description": "Hindustani-specific raga classifications. Includes traditional categories and note-count classifications (Audav/Shadav/Sampurna).",

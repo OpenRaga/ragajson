@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/raga.schema.json",
+  "$id": "raga.schema.json",
   "title": "RagaJSON Schema",
   "description": "Machine-readable schema for describing ragas of Indian classical music.",
   "type": "object",
@@ -10,7 +10,7 @@
       "description": "Raga name."
     },
     "system": {
-      "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/system_enum.json",
+      "$ref": "./components/system_enum.json",
       "description": "Indian classical music system (Hindustani or Carnatic)."
     },
     "classification": {
@@ -18,15 +18,15 @@
       "description": "Raga classification."
     },
     "structure": {
-      "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/types/structure_type.json",
+      "$ref": "./types/structure_type.json",
       "description": "Structural parameters of the raga (notes, patterns, etc.)."
     },
     "performance": {
-      "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/types/performance_type.json",
+      "$ref": "./types/performance_type.json",
       "description": "Performance-related information (time, season, rasa, etc.)."
     },
     "examples": {
-      "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/types/examples_type.json",
+      "$ref": "./types/examples_type.json",
       "description": "Audio, video, and composition examples of the raga."
     },
     "custom": {
@@ -51,43 +51,43 @@
       "then": {
         "properties": {
           "classification": {
-            "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/hindustani_classification_enum.json"
+            "$ref": "./components/hindustani_classification_enum.json"
           },
           "structure": {
             "properties": {
               "svaras": {
                 "type": "array",
                 "items": {
-                  "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/hindustani_sargam_enum.json"
+                  "$ref": "./components/hindustani_sargam_enum.json"
                 },
                 "description": "List of notes used (Hindustani system)"
               },
               "vadi": {
-                "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/hindustani_sargam_enum.json",
+                "$ref": "./components/hindustani_sargam_enum.json",
                 "description": "Vadi — principal note (Hindustani system)"
               },
               "samvadi": {
-                "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/hindustani_sargam_enum.json",
+                "$ref": "./components/hindustani_sargam_enum.json",
                 "description": "Samvadi — second most prominent note (Hindustani system)"
               },
               "varjit_svaras": {
                 "type": "array",
                 "items": {
-                  "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/hindustani_sargam_enum.json"
+                  "$ref": "./components/hindustani_sargam_enum.json"
                 },
                 "description": "Varjit svaras — omitted notes (Hindustani system)"
               },
               "aroha": {
                 "type": "array",
                 "items": {
-                  "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/hindustani_sargam_enum.json"
+                  "$ref": "./components/hindustani_sargam_enum.json"
                 },
                 "description": "Ascending sequence of notes (Hindustani system)"
               },
               "avaroha": {
                 "type": "array",
                 "items": {
-                  "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/hindustani_sargam_enum.json"
+                  "$ref": "./components/hindustani_sargam_enum.json"
                 },
                 "description": "Descending sequence of notes (Hindustani system)"
               }
@@ -107,43 +107,43 @@
       "then": {
         "properties": {
           "classification": {
-            "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/carnatic_classification_enum.json"
+            "$ref": "./components/carnatic_classification_enum.json"
           },
           "structure": {
             "properties": {
               "svaras": {
                 "type": "array",
                 "items": {
-                  "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/carnatic_sargam_enum.json"
+                  "$ref": "./components/carnatic_sargam_enum.json"
                 },
                 "description": "List of notes used (Carnatic system)"
               },
               "vadi": {
-                "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/carnatic_sargam_enum.json",
+                "$ref": "./components/carnatic_sargam_enum.json",
                 "description": "Vadi — principal note (Carnatic system)"
               },
               "samvadi": {
-                "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/carnatic_sargam_enum.json",
+                "$ref": "./components/carnatic_sargam_enum.json",
                 "description": "Samvadi — second most prominent note (Carnatic system)"
               },
               "varjit_svaras": {
                 "type": "array",
                 "items": {
-                  "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/carnatic_sargam_enum.json"
+                  "$ref": "./components/carnatic_sargam_enum.json"
                 },
                 "description": "Varjit svaras — omitted notes (Carnatic system)"
               },
               "aroha": {
                 "type": "array",
                 "items": {
-                  "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/carnatic_sargam_enum.json"
+                  "$ref": "./components/carnatic_sargam_enum.json"
                 },
                 "description": "Ascending sequence of notes (Carnatic system)"
               },
               "avaroha": {
                 "type": "array",
                 "items": {
-                  "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/carnatic_sargam_enum.json"
+                  "$ref": "./components/carnatic_sargam_enum.json"
                 },
                 "description": "Descending sequence of notes (Carnatic system)"
               }

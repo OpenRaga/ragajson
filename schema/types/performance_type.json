@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/types/performance_type.json",
+  "$id": "performance_type.json",
   "title": "PerformanceType",
   "description": "Raga performance parameters (form, tempo, time of day, etc.).",
   "type": "object",
@@ -16,12 +16,12 @@
     "time_of_day": {
       "oneOf": [
         {
-          "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/time_of_day_enum.json"
+          "$ref": "../components/time_of_day_enum.json"
         },
         {
           "type": "array",
           "items": {
-            "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/time_of_day_enum.json"
+            "$ref": "../components/time_of_day_enum.json"
           },
           "uniqueItems": true
         }
@@ -29,13 +29,13 @@
       "description": "Traditional time of day (Samay Chakra) for raga performance. String or array."
     },
     "season": {
-      "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/components/season_enum.json",
+      "$ref": "../components/season_enum.json",
       "description": "Traditional season for raga performance."
     },
     "rasa": {
       "type": "array",
       "items": {
-        "$ref": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/types/rasa_entry_type.json"
+        "$ref": "./rasa_entry_type.json"
       },
       "description": "List of rasas with weights (intensity)"
     },
