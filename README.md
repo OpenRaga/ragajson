@@ -53,7 +53,7 @@ npm run test:schema-quality
 
 - [Schema Reference](docs/) - Technical details
 - [Testing Guide](docs/testing-guide.md) - Validation tools
-- [Examples](examples/) - Real raga data _(coming soon)_
+
 
 ---
 
