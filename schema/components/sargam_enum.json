@@ -1,7 +1,7 @@
 {
-  "$id": "hindustani_sargam_enum.json",
+  "$id": "sargam_enum.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "HindustaniSargamEnum",
+  "title": "SargamEnum",
   "description": "Hindustani sargam notes using Bhatkhande notation. Machine‑friendly const values use ASCII UPPER_SNAKE; suffix _KOMAL denotes komal (flat) notes and _TIVRA denotes tivra (sharp). displayName follows Bhatkhande convention: uppercase = shuddha, lowercase = komal, 'Ma+' = tivra.",
   "type": "string",
   "oneOf": [
