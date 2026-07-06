@@ -138,7 +138,15 @@
       "title": "SeasonEnum",
       "description": "Reference list for indicating the season or time of year traditionally associated with raga performance.",
       "type": "string",
-      "enum": ["Vasant", "Varsha", "Sharad", "Hemant", "Shishir", "Grishma", "No Specific Season"],
+      "oneOf": [
+        { "const": "Vasant", "displayName": "Spring", "description": "Spring season" },
+        { "const": "Varsha", "displayName": "Monsoon", "description": "Monsoon or rainy season" },
+        { "const": "Sharad", "displayName": "Autumn", "description": "Autumn season" },
+        { "const": "Hemant", "displayName": "Pre-winter", "description": "Pre-winter or late autumn season" },
+        { "const": "Shishir", "displayName": "Winter", "description": "Winter season" },
+        { "const": "Grishma", "displayName": "Summer", "description": "Summer season" },
+        { "const": "No Specific Season", "displayName": "Any Season", "description": "No specific season restriction; can be performed anytime" }
+      ],
       "examples": ["Vasant", "Varsha", "No Specific Season"]
     },
     "sargam_enum": {
@@ -202,17 +210,17 @@
       "title": "RasaEnum",
       "description": "Emotional associations (rasa) for raga: shringara, karuna, vira, etc.",
       "type": "string",
-      "enum": [
-        "Shringara",
-        "Karuna",
-        "Vira",
-        "Shanta",
-        "Bhakti",
-        "Hasya",
-        "Adbhuta",
-        "Raudra",
-        "Bibhatsa",
-        "Bhayanaka"
+      "oneOf": [
+        { "const": "Shringara", "displayName": "Romantic", "description": "Romance, love, and beauty" },
+        { "const": "Karuna", "displayName": "Compassionate", "description": "Compassion, grief, and pity" },
+        { "const": "Vira", "displayName": "Heroic", "description": "Heroism, courage, and bravery" },
+        { "const": "Shanta", "displayName": "Peaceful", "description": "Peace, tranquility, and calmness" },
+        { "const": "Bhakti", "displayName": "Devotional", "description": "Devotion and spiritual love" },
+        { "const": "Hasya", "displayName": "Joyful", "description": "Joy, mirth, and humor" },
+        { "const": "Adbhuta", "displayName": "Wondrous", "description": "Wonder, amazement, and mystery" },
+        { "const": "Raudra", "displayName": "Furious", "description": "Anger, fury, and wrath" },
+        { "const": "Bibhatsa", "displayName": "Disgusting", "description": "Disgust and aversion" },
+        { "const": "Bhayanaka", "displayName": "Terrifying", "description": "Fear, terror, and horror" }
       ],
       "examples": ["Shringara", "Karuna"]
     },
@@ -220,18 +228,18 @@
       "title": "ClassificationEnum",
       "description": "Hindustani-specific raga classifications. Includes traditional categories and note-count classifications (Audav/Shadav/Sampurna).",
       "type": "string",
-      "enum": [
-        "Upanga",
-        "Bhashanga",
-        "Vakra",
-        "Naya",
-        "Desya",
-        "Ghana",
-        "Rakti",
-        "Thaat",
-        "Audav",
-        "Shadav",
-        "Sampurna"
+      "oneOf": [
+        { "const": "Upanga", "displayName": "Upanga", "description": "A raga that uses only the notes of its parent thaat or retains its pure distinct character" },
+        { "const": "Bhashanga", "displayName": "Bhashanga", "description": "A raga that borrows a foreign note (vivadi) to enhance its beauty" },
+        { "const": "Vakra", "displayName": "Vakra", "description": "A raga with a crooked or zig-zag ascending/descending scale" },
+        { "const": "Naya", "displayName": "Naya", "description": "A modern or recently created raga" },
+        { "const": "Desya", "displayName": "Desya", "description": "A raga of regional or folk origin" },
+        { "const": "Ghana", "displayName": "Ghana", "description": "A heavy or profound raga, often performed with elaborate ornamentation in vilambit (slow) tempo" },
+        { "const": "Rakti", "displayName": "Rakti", "description": "A highly melodic raga known primarily for its strong emotional appeal and pleasing nature" },
+        { "const": "Thaat", "displayName": "Thaat", "description": "A principal raga that gives its name to one of the parent scales (thaats)" },
+        { "const": "Audav", "displayName": "Audav", "description": "A pentatonic raga (uses exactly 5 notes in its scale)" },
+        { "const": "Shadav", "displayName": "Shadav", "description": "A hexatonic raga (uses exactly 6 notes in its scale)" },
+        { "const": "Sampurna", "displayName": "Sampurna", "description": "A heptatonic raga (uses all 7 notes in its scale)" }
       ],
       "examples": ["Upanga", "Thaat", "Audav", "Sampurna"],
       "tags": ["hindustani"]
