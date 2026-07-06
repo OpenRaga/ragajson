@@ -1,31 +1,46 @@
 # RagaJSON
 
-**A universal format for describing ragas of Indian classical music**
+**A monolithic, theoretically rigorous JSON format for describing Hindustani classical ragas.**
 
-> Making the rich musical heritage of Indian classical ragas accessible to the digital world through standardized, machine-readable data.
+> Making the rich musical heritage of Indian classical ragas accessible to the digital world through standardized, strictly-validated, machine-readable data.
 
 ## The Problem
 
-Raga information is scattered across books, websites, and oral traditions with no standard format. This makes it difficult for apps, researchers, and AI systems to understand and work with raga structures.
+Raga information is scattered across books, websites, and oral traditions with no standard format. Furthermore, many existing digital representations mix pure music theory with subjective performance metadata (like specific tempos, compositions, or notable performers), making it difficult to use the data systematically across different applications.
 
 ## The Solution
 
-**RagaJSON** provides a standardized, machine-readable format for describing ragas using JSON Schema. Think of it as a "universal language" that computers, apps, and researchers can understand.
+**RagaJSON** is a highly minimized, purely theoretical JSON schema for Hindustani classical music.
 
-## Who Uses This
+### Key Architectural Principles
 
-- **Developers**: Build music apps with structured raga data
-- **Researchers**: Analyze ragas systematically
-- **Musicians**: Access comprehensive raga information
-- **AI/ML**: Train models on cultural musical data
+- **Strictly Hindustani**: The schema self-documents by strictly enforcing `"system": "Hindustani"`. It utilizes Bhatkhande notation and grammar.
+- **Monolithic & Portable**: The entire schema is defined in a single, portable `raga.schema.json` file. All enums and definitions are contained within the `$defs` block.
+- **Pure Music Theory (DRY)**: We have stripped out all redundant derived fields (like `jaati` or `varjit_svaras` which can be calculated from `aroha`/`avaroha`) and all subjective metadata (like `tempo`, `form`, or `performers`). RagaJSON represents the timeless structure of a Raga, not a specific performance.
 
-## Technical Overview
+## Example
 
-- **Format**: [JSON Schema draft-2020-12](https://json-schema.org/draft/2020-12)
-- **Validation**: Built-in tools for checking data correctness
-- **Modularity**: Separate schemas for components (notes, time periods, emotions)
-- **Flexibility**: Support for both Hindustani and Carnatic systems
-- **Extensibility**: Custom fields allowed with `x-` prefix
+A valid RagaJSON instance is incredibly compact:
+
+```json
+{
+  "name": "Yaman",
+  "system": "Hindustani",
+  "classification": "Thaat",
+  "structure": {
+    "aroha": ["NI_KOMAL", "RE", "GA", "MA_TIVRA", "DHA", "NI", "SA"],
+    "avaroha": ["SA", "NI", "DHA", "MA_TIVRA", "GA", "RE", "SA"],
+    "vadi": "GA",
+    "samvadi": "NI",
+    "pakad": "NI_KOMAL RE GA, RE SA, PA MA_TIVRA GA RE SA"
+  },
+  "performance": {
+    "time_of_day": ["Pradosh"],
+    "season": "No Specific Season",
+    "rasa": ["Shanti", "Bhakti"]
+  }
+}
+```
 
 ## Quick Start
 
@@ -33,30 +48,17 @@ Raga information is scattered across books, websites, and oral traditions with n
 # Install dependencies
 npm install
 
-# Quick validation with visual feedback
-npm run validate
-
-# Run comprehensive tests
+# Run comprehensive tests (validates the JSON schema and tests structure)
 npm test
-
-# Run quality checks specifically
-npm run test:schema-quality
 ```
-
-**All schemas are validated with:**
-
-- ✅ Technical compliance tests
-- ✅ Quality standard tests
-- ✅ Real-time validation feedback
 
 ## Documentation
 
-- [Schema Reference](docs/) - Technical details
+- [Schema Reference](schema/raga.schema.json) - Explore the monolithic schema
 - [Testing Guide](docs/testing-guide.md) - Validation tools
-- [Examples](examples/) - Real raga data _(coming soon)_
 
 ---
 
 _Made with love for the global Indian classical music community_
 
-Copyright © 2025 OpenRaga Contributors
+Copyright © 2026 OpenRaga Contributors
