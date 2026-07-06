@@ -1,6 +1,6 @@
 # RagaJSON
 
-**A monolithic, theoretically rigorous JSON format for describing Hindustani classical ragas.**
+**A unified, theoretically rigorous JSON format for describing Hindustani classical ragas.**
 
 > Making the rich musical heritage of Indian classical ragas accessible to the digital world through standardized, strictly-validated, machine-readable data.
 
@@ -15,7 +15,7 @@ Raga information is scattered across books, websites, and oral traditions with n
 ### Key Architectural Principles
 
 - **Strictly Hindustani**: The schema self-documents by strictly enforcing `"system": "Hindustani"`. It utilizes Bhatkhande notation and grammar.
-- **Monolithic & Portable**: The entire schema is defined in a single, portable `raga.schema.json` file. All enums and definitions are contained within the `$defs` block.
+- **Single-File & Portable**: The entire schema is defined in a single, portable `raga.schema.json` file. All enums and definitions are contained within the `$defs` block.
 - **Pure Music Theory (DRY)**: We have stripped out all redundant derived fields (like `jaati` or `varjit_svaras` which can be calculated from `aroha`/`avaroha`) and all subjective metadata (like `tempo`, `form`, or `performers`). RagaJSON represents the timeless structure of a Raga, not a specific performance.
 
 ## Example
@@ -54,7 +54,7 @@ npm test
 
 ## Documentation
 
-- [Schema Reference](schema/raga.schema.json) - Explore the monolithic schema
+- [Schema Reference](schema/raga.schema.json) - Explore the complete schema
 - [Testing Guide](docs/testing-guide.md) - Validation tools
 
 ---
