@@ -95,26 +95,10 @@
         "rasa": {
           "type": "array",
           "items": {
-            "type": "object",
-            "properties": {
-              "rasa": {
-                "$ref": "#/$defs/rasa_enum",
-                "description": "Name of the rasa"
-              },
-              "weight": {
-                "type": "number",
-                "description": "Weight (intensity) of this rasa, from 0 to 1",
-                "minimum": 0,
-                "maximum": 1
-              }
-            },
-            "required": [
-              "rasa",
-              "weight"
-            ],
-            "additionalProperties": false
+            "$ref": "#/$defs/rasa_enum"
           },
-          "description": "List of rasas with weights (intensity)"
+          "uniqueItems": true,
+          "description": "List of emotional associations (rasa) for the raga"
         },
         "composers": {
           "type": "array",
