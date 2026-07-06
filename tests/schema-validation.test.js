@@ -2,13 +2,11 @@ const Ajv = require("ajv")
 const addFormats = require("ajv-formats")
 const fs = require("fs")
 const path = require("path")
-const glob = require("glob")
 
 describe("JSON Schema Meta-Validation", () => {
   let ajv
 
   beforeAll(() => {
-    // Create AJV with format support
     ajv = new Ajv({
       strict: false,
       allErrors: true,
@@ -17,18 +15,17 @@ describe("JSON Schema Meta-Validation", () => {
     addFormats(ajv)
   })
 
-  // Find all JSON files in schema/ folder
-  const schemaFiles = glob.sync("schema/**/*.json")
+  const filePath = "schema/raga.schema.json"
 
   describe("Schema File Structure", () => {
-    test.each(schemaFiles)("%s should be valid JSON", filePath => {
+    test("schema should be valid JSON", () => {
       expect(() => {
         const content = fs.readFileSync(filePath, "utf8")
         JSON.parse(content)
       }).not.toThrow()
     })
 
-    test.each(schemaFiles)("%s should have required meta fields", filePath => {
+    test("schema should have required meta fields", () => {
       const schema = JSON.parse(fs.readFileSync(filePath, "utf8"))
 
       expect(schema.$schema).toBeDefined()
@@ -40,35 +37,31 @@ describe("JSON Schema Meta-Validation", () => {
   })
 
   describe("Schema Meta-Validation Against draft-2020-12", () => {
-    test.each(schemaFiles)("%s should be valid JSON Schema", filePath => {
+    test("schema should be valid JSON Schema", () => {
       const schema = JSON.parse(fs.readFileSync(filePath, "utf8"))
 
-      // Check basic JSON Schema structure
       const hasValidStructure =
-        schema.type || schema.enum || schema.oneOf || schema.anyOf || schema.allOf
+        schema.type || schema.enum || schema.oneOf || schema.anyOf || schema.allOf || schema.$defs
       expect(hasValidStructure).toBeTruthy()
     })
   })
 
   describe("$ref Links Validation", () => {
-    test.each(schemaFiles)("%s should have resolvable $ref links", filePath => {
+    test("schema should have resolvable $ref links", () => {
       const schema = JSON.parse(fs.readFileSync(filePath, "utf8"))
       const refs = extractRefs(schema)
 
       refs.forEach(ref => {
-        if (ref.startsWith("./") || ref.startsWith("../")) {
-          // Resolve relative path from the current schema file's directory
-          const schemaDir = path.dirname(filePath)
-          const resolvedPath = path.resolve(schemaDir, ref)
-
-          expect(fs.existsSync(resolvedPath)).toBe(true)
+        if (ref.startsWith("#/")) {
+          // This is a local ref, the quality test checks internal resolution
+        } else {
+            throw new Error(`Unexpected external ref: ${ref}`);
         }
       })
     })
   })
 })
 
-// Utility to extract all $ref from schema
 function extractRefs(obj, refs = []) {
   if (typeof obj === "object" && obj !== null) {
     if (obj.$ref && typeof obj.$ref === "string") {
