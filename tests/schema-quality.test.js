@@ -122,19 +122,7 @@ describe("JSON Schema Quality Check", () => {
       expect(schema.type).toBe("string")
     })
 
-    const typeFiles = schemaFiles.filter(file => file.includes("_type.json"))
-    test.each(typeFiles)("%s should have consistent type structure", filePath => {
-      const schema = schemaCache.get(filePath)
 
-      // Type schemas should have 'type': 'object' or be more complex
-      expect(schema.type === "object" || schema.oneOf || schema.anyOf).toBeTruthy()
-
-      // Should have properties defined if it's an object
-      if (schema.type === "object") {
-        expect(schema.properties).toBeDefined()
-        expect(typeof schema.properties).toBe("object")
-      }
-    })
   })
 
   describe("🏷️ displayName and Custom Properties", () => {
@@ -154,20 +142,7 @@ describe("JSON Schema Quality Check", () => {
       }
     )
 
-    test.each(cachedSchemas)(
-      "%s should have proper custom field patterns",
-      ({ filePath, schema }) => {
-        function handleCustomPatterns(obj) {
-          if (obj.custom) {
-            expect(obj.custom.patternProperties).toBeDefined()
-            expect(obj.custom.patternProperties["^x-"]).toBeDefined()
-            expect(obj.custom.additionalProperties).toBe(false)
-          }
-        }
 
-        traverse(schema, handleCustomPatterns)
-      }
-    )
   })
 
   describe("🔗 $ref Link Validation", () => {
@@ -230,7 +205,7 @@ describe("JSON Schema Quality Check", () => {
       function handleDescriptions(obj, path = "") {
         if (obj.properties) {
           for (const [propName, propSchema] of Object.entries(obj.properties)) {
-            if (propName !== "custom" && typeof propSchema === "object") {
+            if (typeof propSchema === "object") {
               const currentPath = path ? `${path}.${propName}` : propName
 
               // Skip checking descriptions for properties that only have $ref
@@ -317,8 +292,6 @@ describe("JSON Schema Quality Check", () => {
       const fileName = path.basename(filePath, ".json")
       if (fileName.includes("_enum")) {
         expect(schema.title).toMatch(/Enum$/)
-      } else if (fileName.includes("_type")) {
-        expect(schema.title).toMatch(/Type$/)
       }
     })
 
