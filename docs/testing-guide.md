@@ -165,7 +165,7 @@ npm run test                  # All tests including quality
 #### 🏷️ displayName and Custom Properties
 
 - ✅ `displayName` present for complex enums
-- ✅ Proper custom field patterns (x- prefix support)
+
 - ✅ Validation of enum display names
 
 #### 🔗 $ref Link Validation
