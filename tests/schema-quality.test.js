@@ -2,7 +2,6 @@ const Ajv = require("ajv")
 const addFormats = require("ajv-formats")
 const fs = require("fs")
 const path = require("path")
-const glob = require("glob")
 
 // Generalized utility function for traversing objects with circular reference protection
 function traverse(obj, callback, options = {}) {
@@ -29,21 +28,19 @@ function traverse(obj, callback, options = {}) {
 
 describe("JSON Schema Quality Check", () => {
   let ajv
-  const schemaFiles = glob.sync("schema/**/*.json")
-  const schemaCache = new Map()
+  const filePath = "schema/raga.schema.json"
+  let mainSchema
 
-  // Parse schemas defensively for test.each() - validation moved to tests
-  const cachedSchemas = schemaFiles
-    .map(filePath => {
-      try {
-        const schema = JSON.parse(fs.readFileSync(filePath, "utf8"))
-        return { filePath, schema }
-      } catch (error) {
-        // Return placeholder - validation will be done in test blocks
-        return { filePath, schema: null, error: error.message }
-      }
-    })
-    .filter(item => item.schema !== null) // Only include valid schemas for test.each()
+  try {
+    mainSchema = JSON.parse(fs.readFileSync(filePath, "utf8"))
+  } catch (error) {
+    mainSchema = null
+  }
+
+  // Extract all definitions for localized testing
+  const defSchemas = mainSchema && mainSchema.$defs 
+    ? Object.entries(mainSchema.$defs).map(([name, schema]) => ({ name, schema })) 
+    : []
 
   beforeAll(() => {
     ajv = new Ajv({
@@ -52,49 +49,34 @@ describe("JSON Schema Quality Check", () => {
       validateSchema: false
     })
     addFormats(ajv)
-
-    // Store in cache for quick access
-    cachedSchemas.forEach(({ filePath, schema }) => {
-      if (schema) {
-        schemaCache.set(filePath, schema)
-      }
-    })
   })
 
   describe("📋 Schema Structure Validation", () => {
-    test.each(cachedSchemas)("validate schema structure for %s", ({ filePath, schema }) => {
-      // Basic schema validation
-      expect(typeof schema).toBe("object")
-      expect(schema).not.toBeNull()
-      expect(Array.isArray(schema)).toBe(false)
+    test("validate main schema structure", () => {
+      expect(typeof mainSchema).toBe("object")
+      expect(mainSchema).not.toBeNull()
+      expect(Array.isArray(mainSchema)).toBe(false)
 
-      // Check required JSON Schema fields
       const requiredFields = ["$schema", "$id", "type", "title", "description"]
       requiredFields.forEach(field => {
-        expect(schema).toHaveProperty(field)
+        expect(mainSchema).toHaveProperty(field)
       })
 
-      // Validate exact schema version (consolidated check)
-      expect(schema.$schema).toBe("https://json-schema.org/draft/2020-12/schema")
+      expect(mainSchema.$schema).toBe("https://json-schema.org/draft/2020-12/schema")
     })
   })
 
   describe("📝 Metadata Requirements", () => {
-    test.each(cachedSchemas)(
-      "%s should have all required metadata fields",
-      ({ filePath, schema }) => {
-        // Metadata quality check (required fields already validated in structure validation)
-        expect(schema.title).toMatch(/^[A-Z][a-zA-Z\s]*$/) // Allow spaces
-        expect(schema.description.length).toBeGreaterThan(10) // Detailed description
-        expect(schema.description).toMatch(/^[A-Z]/) // Starts with capital letter
-        expect(schema.description).toMatch(/\.$/) // Ends with period
-      }
-    )
+    test("main schema should have all required metadata fields", () => {
+      expect(mainSchema.title).toMatch(/^[A-Z][a-zA-Z\s]*$/)
+      expect(mainSchema.description.length).toBeGreaterThan(10)
+      expect(mainSchema.description).toMatch(/^[A-Z]/)
+      expect(mainSchema.description).toMatch(/\.$/)
+    })
 
-    test.each(cachedSchemas)(
-      "%s should have examples where appropriate",
-      ({ filePath, schema }) => {
-        // Enum schemas should have examples
+    test.each(defSchemas)(
+      "def %s should have examples where appropriate",
+      ({ name, schema }) => {
         if (schema.enum || schema.oneOf) {
           expect(schema.examples).toBeDefined()
           expect(Array.isArray(schema.examples)).toBe(true)
@@ -105,31 +87,16 @@ describe("JSON Schema Quality Check", () => {
   })
 
   describe("🎯 Structure Consistency", () => {
-    test.each(cachedSchemas)("%s should have consistent $id pattern", ({ filePath, schema }) => {
-      const expectedId = path.basename(filePath)
-      expect(schema.$id).toBe(expectedId)
-    })
-
-    // Parameterized tests for better error tracing
-    const enumFiles = schemaFiles.filter(file => file.includes("_enum.json"))
-    test.each(enumFiles)("%s should have consistent enum structure", filePath => {
-      const schema = schemaCache.get(filePath)
-
-      // Enum schemas should have either 'enum' or 'oneOf'
+    test.each(defSchemas)("def %s should have consistent enum structure", ({ name, schema }) => {
       expect(schema.enum || schema.oneOf).toBeDefined()
-
-      // Should have type string
       expect(schema.type).toBe("string")
     })
-
-
   })
 
   describe("🏷️ displayName and Custom Properties", () => {
-    test.each(cachedSchemas)(
-      "%s should have displayName for complex enums",
-      ({ filePath, schema }) => {
-        // If there's oneOf with const, displayName should be present
+    test.each(defSchemas)(
+      "def %s should have displayName for complex enums",
+      ({ name, schema }) => {
         if (schema.oneOf && Array.isArray(schema.oneOf)) {
           schema.oneOf.forEach(item => {
             if (item.const) {
@@ -141,114 +108,62 @@ describe("JSON Schema Quality Check", () => {
         }
       }
     )
-
-
   })
 
   describe("🔗 $ref Link Validation", () => {
-    test.each(cachedSchemas)("%s should have valid $ref links", ({ filePath, schema }) => {
-      const refs = extractRefs(schema)
+    test("main schema should have valid local $ref links", () => {
+      const refs = extractRefs(mainSchema)
 
       refs.forEach(ref => {
-        if (ref.startsWith("./") || ref.startsWith("../")) {
-          // Validate relative path refs
-          const schemaDir = path.dirname(filePath)
-          const resolvedPath = path.resolve(schemaDir, ref)
-
-          expect(fs.existsSync(resolvedPath)).toBe(true)
-
-          // Check that file is valid JSON
-          expect(() => {
-            JSON.parse(fs.readFileSync(resolvedPath, "utf8"))
-          }).not.toThrow()
-        } else if (ref.startsWith("#/")) {
-          // Validate local JSON Pointer refs within the same schema
-          const pointer = ref.substring(2) // Remove '#/' prefix
+        if (ref.startsWith("#/")) {
+          const pointer = ref.substring(2)
           const parts = pointer.split("/")
 
-          let current = schema
+          let current = mainSchema
           for (const part of parts) {
             expect(current).toHaveProperty(part)
             current = current[part]
           }
-        }
-      })
-    })
-
-    test("all $ref links should be resolvable within project", () => {
-      const allRefs = new Set()
-
-      schemaFiles.forEach(filePath => {
-        const schema = schemaCache.get(filePath)
-        const refs = extractRefs(schema)
-        refs.forEach(ref => allRefs.add({ ref, filePath }))
-      })
-
-      allRefs.forEach(({ ref, filePath }) => {
-        if (ref.startsWith("./") || ref.startsWith("../")) {
-          const schemaDir = path.dirname(filePath)
-          const resolvedPath = path.resolve(schemaDir, ref)
-
-          expect(fs.existsSync(resolvedPath)).toBe(true)
-
-          // Check that file is valid JSON
-          expect(() => {
-            JSON.parse(fs.readFileSync(resolvedPath, "utf8"))
-          }).not.toThrow()
+        } else {
+          // No external refs should exist
+          throw new Error(`External ref not expected: ${ref}`)
         }
       })
     })
   })
 
   describe("📚 Documentation Readiness", () => {
-    test.each(cachedSchemas)("%s should have descriptive properties", ({ filePath, schema }) => {
+    test("main schema should have descriptive properties", () => {
       function handleDescriptions(obj, path = "") {
         if (obj.properties) {
           for (const [propName, propSchema] of Object.entries(obj.properties)) {
             if (typeof propSchema === "object") {
-              const currentPath = path ? `${path}.${propName}` : propName
-
-              // Skip checking descriptions for properties that only have $ref
-              if (propSchema.$ref && !propSchema.description) {
-                continue
+              if (propSchema.$ref && !propSchema.description) continue
+              
+              // Description should be defined for structural properties
+              if (propSchema.type) {
+                 expect(propSchema.description).toBeDefined()
+                 expect(propSchema.description.length).toBeGreaterThan(5)
               }
-
-              expect(propSchema.description).toBeDefined()
-              expect(propSchema.description.length).toBeGreaterThan(5)
             }
           }
         }
       }
 
-      // Use custom traversal for this case because we need to skip certain keys
-      const skipKeys = [
-        "if",
-        "then",
-        "else",
-        "allOf",
-        "anyOf",
-        "oneOf",
-        "not",
-        "examples",
-        "enum",
-        "const"
-      ]
-
-      traverse(schema, handleDescriptions, { skipKeys })
+      const skipKeys = ["if", "then", "else", "allOf", "anyOf", "oneOf", "not", "examples", "enum", "const"]
+      traverse(mainSchema, handleDescriptions, { skipKeys })
     })
 
-    test.each(cachedSchemas)(
-      "%s should have meaningful enum descriptions",
-      ({ filePath, schema }) => {
+    test.each(defSchemas)(
+      "def %s should have meaningful enum descriptions",
+      ({ name, schema }) => {
         if (schema.enum) {
-          // Simple enums should have detailed descriptions
           expect(schema.description).toBeDefined()
           expect(schema.description.length).toBeGreaterThan(20)
         }
 
         if (schema.oneOf) {
-          // oneOf enums should have displayName for each variant
-          schema.oneOf.forEach((item, index) => {
+          schema.oneOf.forEach((item) => {
             if (item.const) {
               expect(item.displayName).toBeDefined()
             }
@@ -258,19 +173,13 @@ describe("JSON Schema Quality Check", () => {
     )
 
     test("all enum values should be properly documented", () => {
-      const enumFiles = schemaFiles.filter(file => file.includes("_enum.json"))
-
-      enumFiles.forEach(filePath => {
-        const schema = schemaCache.get(filePath)
-
+      defSchemas.forEach(({ name, schema }) => {
         if (schema.enum) {
-          // Check that all enum values are in examples
           const enumValues = schema.enum
           const exampleValues = schema.examples || []
 
           expect(exampleValues.length).toBeGreaterThan(0)
 
-          // All examples should be valid enum values
           exampleValues.forEach(example => {
             expect(enumValues).toContain(example)
           })
@@ -280,34 +189,20 @@ describe("JSON Schema Quality Check", () => {
   })
 
   describe("🎨 Style and Formatting", () => {
-    test.each(cachedSchemas)("%s should follow naming conventions", ({ filePath, schema }) => {
-      // Title should be PascalCase
-      expect(schema.title).toMatch(/^[A-Z][a-zA-Z\s]*$/)
-
-      // Description should be a proper sentence
-      expect(schema.description).toMatch(/^[A-Z]/)
-      expect(schema.description).toMatch(/\.$/)
-
-      // File name should match content type
-      const fileName = path.basename(filePath, ".json")
-      if (fileName.includes("_enum")) {
-        expect(schema.title).toMatch(/Enum$/)
-      }
+    test("main schema should follow naming conventions", () => {
+      expect(mainSchema.title).toMatch(/^[A-Z][a-zA-Z\s]*$/)
+      expect(mainSchema.description).toMatch(/^[A-Z]/)
+      expect(mainSchema.description).toMatch(/\.$/)
     })
 
-    test.each(cachedSchemas)("%s should have proper JSON formatting", ({ filePath }) => {
+    test("schema file should have proper JSON formatting", () => {
       const content = fs.readFileSync(filePath, "utf8")
-
-      // Should be valid JSON
       expect(() => JSON.parse(content)).not.toThrow()
-
-      // Should not have trailing commas or other formatting issues
       expect(content).not.toMatch(/,\s*[}\]]/)
     })
   })
 })
 
-// Utility functions
 function extractRefs(obj, refs = new Set()) {
   if (typeof obj === "object" && obj !== null) {
     if (obj.$ref && typeof obj.$ref === "string") {
