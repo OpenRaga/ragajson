@@ -10,7 +10,7 @@ Raga information is scattered across books, websites, and oral traditions with n
 
 ## The Solution
 
-**RagaJSON** is a highly minimized, purely theoretical JSON schema for Hindustani classical music.
+**RagaJSON** is a strict JSON schema for Hindustani classical music.
 
 ### Key Architectural Principles
 

@@ -1,7 +1,6 @@
 const { describe, test, before } = require("node:test");
 const assert = require("node:assert");
 const Ajv2020 = require("ajv/dist/2020");
-const addFormats = require("ajv-formats");
 const fs = require("fs");
 
 describe("RagaJSON Schema Validation & Quality", () => {
@@ -15,7 +14,6 @@ describe("RagaJSON Schema Validation & Quality", () => {
       allErrors: true,
       validateSchema: true // Ajv will automatically meta-validate against draft-2020-12
     });
-    addFormats(ajv);
   });
 
   test("schema file should load and parse as valid JSON", () => {
