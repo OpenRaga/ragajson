@@ -3,12 +3,11 @@
   "version": "0.1.0-alpha",
   "description": "Machine-readable schema for describing ragas of Indian classical music",
   "scripts": {
-    "test": "jest"
+    "test": "node --test"
   },
   "devDependencies": {
     "ajv": "^8.17.1",
-    "ajv-formats": "^3.0.1",
-    "jest": "^30.0.0"
+    "ajv-formats": "^3.0.1"
   },
   "keywords": [
     "raga",
