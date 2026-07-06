@@ -25,10 +25,6 @@
       "$ref": "./types/performance_type.json",
       "description": "Performance-related information (time, season, rasa, etc.)."
     },
-    "examples": {
-      "$ref": "./types/examples_type.json",
-      "description": "Audio, video, and composition examples of the raga."
-    },
     "custom": {
       "type": "object",
       "description": "User extensions and additional properties not included in the main schema. Keys must start with 'x-'.",
