@@ -3,16 +3,12 @@
   "version": "0.1.0-alpha",
   "description": "Machine-readable schema for describing ragas of Indian classical music",
   "scripts": {
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "format:json": "prettier --write \"**/*.json\"",
     "test": "jest"
   },
   "devDependencies": {
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
-    "jest": "^30.0.0",
-    "prettier": "^3.0.0"
+    "jest": "^30.0.0"
   },
   "keywords": [
     "raga",
