@@ -14,7 +14,7 @@
       "description": "Indian classical music system (Hindustani or Carnatic)."
     },
     "classification": {
-      "type": "string",
+      "$ref": "./components/hindustani_classification_enum.json",
       "description": "Raga classification."
     },
     "structure": {
@@ -35,120 +35,7 @@
     }
   },
   "required": ["name", "system"],
-  "allOf": [
-    {
-      "if": {
-        "properties": {
-          "system": {
-            "const": "Hindustani"
-          }
-        }
-      },
-      "then": {
-        "properties": {
-          "classification": {
-            "$ref": "./components/hindustani_classification_enum.json"
-          },
-          "structure": {
-            "properties": {
-              "svaras": {
-                "type": "array",
-                "items": {
-                  "$ref": "./components/hindustani_sargam_enum.json"
-                },
-                "description": "List of notes used (Hindustani system)"
-              },
-              "vadi": {
-                "$ref": "./components/hindustani_sargam_enum.json",
-                "description": "Vadi — principal note (Hindustani system)"
-              },
-              "samvadi": {
-                "$ref": "./components/hindustani_sargam_enum.json",
-                "description": "Samvadi — second most prominent note (Hindustani system)"
-              },
-              "varjit_svaras": {
-                "type": "array",
-                "items": {
-                  "$ref": "./components/hindustani_sargam_enum.json"
-                },
-                "description": "Varjit svaras — omitted notes (Hindustani system)"
-              },
-              "aroha": {
-                "type": "array",
-                "items": {
-                  "$ref": "./components/hindustani_sargam_enum.json"
-                },
-                "description": "Ascending sequence of notes (Hindustani system)"
-              },
-              "avaroha": {
-                "type": "array",
-                "items": {
-                  "$ref": "./components/hindustani_sargam_enum.json"
-                },
-                "description": "Descending sequence of notes (Hindustani system)"
-              }
-            }
-          }
-        }
-      }
-    },
-    {
-      "if": {
-        "properties": {
-          "system": {
-            "const": "Carnatic"
-          }
-        }
-      },
-      "then": {
-        "properties": {
-          "classification": {
-            "$ref": "./components/carnatic_classification_enum.json"
-          },
-          "structure": {
-            "properties": {
-              "svaras": {
-                "type": "array",
-                "items": {
-                  "$ref": "./components/carnatic_sargam_enum.json"
-                },
-                "description": "List of notes used (Carnatic system)"
-              },
-              "vadi": {
-                "$ref": "./components/carnatic_sargam_enum.json",
-                "description": "Vadi — principal note (Carnatic system)"
-              },
-              "samvadi": {
-                "$ref": "./components/carnatic_sargam_enum.json",
-                "description": "Samvadi — second most prominent note (Carnatic system)"
-              },
-              "varjit_svaras": {
-                "type": "array",
-                "items": {
-                  "$ref": "./components/carnatic_sargam_enum.json"
-                },
-                "description": "Varjit svaras — omitted notes (Carnatic system)"
-              },
-              "aroha": {
-                "type": "array",
-                "items": {
-                  "$ref": "./components/carnatic_sargam_enum.json"
-                },
-                "description": "Ascending sequence of notes (Carnatic system)"
-              },
-              "avaroha": {
-                "type": "array",
-                "items": {
-                  "$ref": "./components/carnatic_sargam_enum.json"
-                },
-                "description": "Descending sequence of notes (Carnatic system)"
-              }
-            }
-          }
-        }
-      }
-    }
-  ],
+
   "additionalProperties": false,
   "patternProperties": {
     "^x-": {}
