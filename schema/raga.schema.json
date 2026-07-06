@@ -35,13 +35,6 @@
           },
           "description": "Descending sequence of notes"
         },
-        "svaras": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/sargam_enum"
-          },
-          "description": "List of notes used"
-        },
         "vadi": {
           "$ref": "#/$defs/sargam_enum",
           "description": "Vadi — principal (most prominent) note of the raga"
@@ -53,17 +46,6 @@
         "pakad": {
           "type": "string",
           "description": "Pakad — characteristic melodic phrase of the raga"
-        },
-        "jaati": {
-          "$ref": "#/$defs/jaati_enum",
-          "description": "Jaati — classification by number of notes (e.g., audav, shadav, sampurna, etc.)"
-        },
-        "varjit_svaras": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/sargam_enum"
-          },
-          "description": "Varjit svaras — omitted notes"
         }
       },
       "additionalProperties": false
@@ -72,14 +54,6 @@
       "type": "object",
       "description": "Performance-related information (time, season, rasa, etc.).",
       "properties": {
-        "form": {
-          "type": "string",
-          "description": "Performance form (khayal, dhrupad, etc., English only)"
-        },
-        "tempo": {
-          "type": "string",
-          "description": "Performance tempo (vilambit, madhya, drut, etc.)"
-        },
         "time_of_day": {
           "type": "array",
           "items": {
@@ -99,20 +73,6 @@
           },
           "uniqueItems": true,
           "description": "List of emotional associations (rasa) for the raga"
-        },
-        "composers": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Famous composers associated with the raga"
-        },
-        "notable_performers": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Famous performers of the raga"
         }
       },
       "additionalProperties": false
@@ -283,63 +243,6 @@
       "examples": [
         "Shringara",
         "Karuna"
-      ]
-    },
-    "jaati_enum": {
-      "title": "JaatiEnum",
-      "description": "Classification by number of notes in aroha-avaroha patterns. Format: Aroha-Avaroha (e.g., Audava-Sampurna = 5 notes ascending, 7 notes descending). All forms use explicit aroha-avaroha notation for clarity.",
-      "type": "string",
-      "oneOf": [
-        {
-          "const": "Audava-Audava",
-          "displayName": "Audava-Audava",
-          "description": "5 notes in aroha, 5 notes in avaroha."
-        },
-        {
-          "const": "Audava-Shadava",
-          "displayName": "Audava-Shadava",
-          "description": "5 notes in aroha, 6 notes in avaroha."
-        },
-        {
-          "const": "Audava-Sampurna",
-          "displayName": "Audava-Sampurna",
-          "description": "5 notes in aroha, 7 notes in avaroha."
-        },
-        {
-          "const": "Shadava-Audava",
-          "displayName": "Shadava-Audava",
-          "description": "6 notes in aroha, 5 notes in avaroha."
-        },
-        {
-          "const": "Shadava-Shadava",
-          "displayName": "Shadava-Shadava",
-          "description": "6 notes in aroha, 6 notes in avaroha."
-        },
-        {
-          "const": "Shadava-Sampurna",
-          "displayName": "Shadava-Sampurna",
-          "description": "6 notes in aroha, 7 notes in avaroha."
-        },
-        {
-          "const": "Sampurna-Audava",
-          "displayName": "Sampurna-Audava",
-          "description": "7 notes in aroha, 5 notes in avaroha."
-        },
-        {
-          "const": "Sampurna-Shadava",
-          "displayName": "Sampurna-Shadava",
-          "description": "7 notes in aroha, 6 notes in avaroha."
-        },
-        {
-          "const": "Sampurna-Sampurna",
-          "displayName": "Sampurna-Sampurna",
-          "description": "7 notes in aroha, 7 notes in avaroha."
-        }
-      ],
-      "examples": [
-        "Audava-Audava",
-        "Audava-Sampurna",
-        "Sampurna-Sampurna"
       ]
     },
     "classification_enum": {
