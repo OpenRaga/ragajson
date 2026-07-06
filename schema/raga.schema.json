@@ -78,10 +78,7 @@
       "additionalProperties": false
     }
   },
-  "required": [
-    "name",
-    "system"
-  ],
+  "required": ["name", "system"],
   "additionalProperties": false,
   "$defs": {
     "time_of_day_enum": {
@@ -135,30 +132,14 @@
           "description": "No specific time restriction - suitable for any time of day"
         }
       ],
-      "examples": [
-        "Pratah",
-        "Sandhya",
-        "Unrestricted"
-      ]
+      "examples": ["Pratah", "Sandhya", "Unrestricted"]
     },
     "season_enum": {
       "title": "SeasonEnum",
       "description": "Reference list for indicating the season or time of year traditionally associated with raga performance.",
       "type": "string",
-      "enum": [
-        "Vasant",
-        "Varsha",
-        "Sharad",
-        "Hemant",
-        "Shishir",
-        "Grishma",
-        "No Specific Season"
-      ],
-      "examples": [
-        "Vasant",
-        "Varsha",
-        "No Specific Season"
-      ]
+      "enum": ["Vasant", "Varsha", "Sharad", "Hemant", "Shishir", "Grishma", "No Specific Season"],
+      "examples": ["Vasant", "Varsha", "No Specific Season"]
     },
     "sargam_enum": {
       "title": "SargamEnum",
@@ -214,15 +195,8 @@
           "displayName": "Ni"
         }
       ],
-      "examples": [
-        "SA",
-        "RE_KOMAL",
-        "MA_TIVRA"
-      ],
-      "tags": [
-        "hindustani",
-        "bhatkhande"
-      ]
+      "examples": ["SA", "RE_KOMAL", "MA_TIVRA"],
+      "tags": ["hindustani", "bhatkhande"]
     },
     "rasa_enum": {
       "title": "RasaEnum",
@@ -240,10 +214,7 @@
         "Bibhatsa",
         "Bhayanaka"
       ],
-      "examples": [
-        "Shringara",
-        "Karuna"
-      ]
+      "examples": ["Shringara", "Karuna"]
     },
     "classification_enum": {
       "title": "ClassificationEnum",
@@ -262,15 +233,8 @@
         "Shadav",
         "Sampurna"
       ],
-      "examples": [
-        "Upanga",
-        "Thaat",
-        "Audav",
-        "Sampurna"
-      ],
-      "tags": [
-        "hindustani"
-      ]
+      "examples": ["Upanga", "Thaat", "Audav", "Sampurna"],
+      "tags": ["hindustani"]
     }
   }
 }
