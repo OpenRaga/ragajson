@@ -48,10 +48,7 @@ A valid RagaJSON instance is incredibly compact:
 # Install dependencies
 npm install
 
-# Quick validation with visual feedback
-npm run validate
-
-# Run comprehensive tests (structure, quality, and JSON schema meta-validation)
+# Run comprehensive tests (validates the JSON schema and tests structure)
 npm test
 ```
 
