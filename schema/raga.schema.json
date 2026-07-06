@@ -73,19 +73,12 @@
           "description": "Performance tempo (vilambit, madhya, drut, etc.)"
         },
         "time_of_day": {
-          "oneOf": [
-            {
-              "$ref": "./components/time_of_day_enum.json"
-            },
-            {
-              "type": "array",
-              "items": {
-                "$ref": "./components/time_of_day_enum.json"
-              },
-              "uniqueItems": true
-            }
-          ],
-          "description": "Traditional time of day (Samay Chakra) for raga performance. String or array."
+          "type": "array",
+          "items": {
+            "$ref": "./components/time_of_day_enum.json"
+          },
+          "uniqueItems": true,
+          "description": "Traditional time of day (Samay Chakra) for raga performance. Array of strings."
         },
         "season": {
           "$ref": "./components/season_enum.json",
