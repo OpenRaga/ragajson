@@ -10,11 +10,11 @@
       "description": "Raga name."
     },
     "system": {
-      "$ref": "./components/system_enum.json",
+      "const": "Hindustani",
       "description": "Indian classical music system (Hindustani)."
     },
     "classification": {
-      "$ref": "./components/hindustani_classification_enum.json",
+      "$ref": "./components/classification_enum.json",
       "description": "Raga classification."
     },
     "structure": {
@@ -23,25 +23,25 @@
       "properties": {
         "aroha": {
           "type": "array",
-          "items": { "$ref": "./components/hindustani_sargam_enum.json" },
+          "items": { "$ref": "./components/sargam_enum.json" },
           "description": "Ascending sequence of notes"
         },
         "avaroha": {
           "type": "array",
-          "items": { "$ref": "./components/hindustani_sargam_enum.json" },
+          "items": { "$ref": "./components/sargam_enum.json" },
           "description": "Descending sequence of notes"
         },
         "svaras": {
           "type": "array",
-          "items": { "$ref": "./components/hindustani_sargam_enum.json" },
+          "items": { "$ref": "./components/sargam_enum.json" },
           "description": "List of notes used"
         },
         "vadi": {
-          "$ref": "./components/hindustani_sargam_enum.json",
+          "$ref": "./components/sargam_enum.json",
           "description": "Vadi — principal (most prominent) note of the raga"
         },
         "samvadi": {
-          "$ref": "./components/hindustani_sargam_enum.json",
+          "$ref": "./components/sargam_enum.json",
           "description": "Samvadi — second most prominent note of the raga"
         },
         "pakad": {
@@ -54,7 +54,7 @@
         },
         "varjit_svaras": {
           "type": "array",
-          "items": { "$ref": "./components/hindustani_sargam_enum.json" },
+          "items": { "$ref": "./components/sargam_enum.json" },
           "description": "Varjit svaras — omitted notes"
         }
       },

@@ -1,9 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "system_enum.json",
-  "title": "SystemEnum",
-  "description": "Indian classical music system: Hindustani (North Indian) tradition.",
-  "type": "string",
-  "enum": ["Hindustani"],
-  "examples": ["Hindustani"]
-}
