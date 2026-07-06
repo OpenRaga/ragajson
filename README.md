@@ -55,7 +55,6 @@ npm test
 ## Documentation
 
 - [Schema Reference](schema/raga.schema.json) - Explore the complete schema
-- [Testing Guide](docs/testing-guide.md) - Validation tools
 
 ---
 
