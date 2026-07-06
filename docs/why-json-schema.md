@@ -6,7 +6,7 @@ This choice reflects our goals:
 
 - Clear and strict validation of complex, structured musical data
 - Modular and reusable schema components via `$ref`
-- Support for conditional logic (`if/then`) to distinguish between Hindustani and Carnatic systems
+
 - Controlled extensibility through `x-*` fields
 - Compatibility with modern tools and editors
 

@@ -24,7 +24,7 @@ Raga information is scattered across books, websites, and oral traditions with n
 - **Format**: [JSON Schema draft-2020-12](https://json-schema.org/draft/2020-12)
 - **Validation**: Built-in tools for checking data correctness
 - **Modularity**: Separate schemas for components (notes, time periods, emotions)
-- **Flexibility**: Support for both Hindustani and Carnatic systems
+
 - **Extensibility**: Custom fields allowed with `x-` prefix
 
 ## Quick Start
