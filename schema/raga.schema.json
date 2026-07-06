@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "raga.schema.json",
+  "$id": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/raga.schema.json",
   "title": "RagaJSON Schema",
   "description": "Machine-readable schema for describing ragas of Indian classical music.",
   "type": "object",
@@ -13,9 +13,18 @@
       "const": "Hindustani",
       "description": "Indian classical music system (Hindustani)."
     },
+    "thaat": {
+      "type": "string",
+      "enum": ["Bilawal", "Kalyan", "Khamaj", "Bhairav", "Purvi", "Marwa", "Kafi", "Asavari", "Bhairavi", "Todi"],
+      "description": "Parent thaat (parent scale) of the raga per the Bhatkhande system."
+    },
     "classification": {
-      "$ref": "#/$defs/classification_enum",
-      "description": "Raga classification."
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/classification_enum"
+      },
+      "uniqueItems": true,
+      "description": "Raga classifications. A raga may belong to several categories at once."
     },
     "structure": {
       "type": "object",
@@ -226,7 +235,7 @@
     },
     "classification_enum": {
       "title": "ClassificationEnum",
-      "description": "Hindustani-specific raga classifications. Includes traditional categories and note-count classifications (Audav/Shadav/Sampurna).",
+      "description": "Hindustani-specific raga classifications: traditional categories of character, origin, and melodic movement. Note-count classes are covered separately by JatiEnum.",
       "type": "string",
       "oneOf": [
         { "const": "Upanga", "displayName": "Upanga", "description": "A raga that uses only the notes of its parent thaat or retains its pure distinct character" },
@@ -236,12 +245,9 @@
         { "const": "Desya", "displayName": "Desya", "description": "A raga of regional or folk origin" },
         { "const": "Ghana", "displayName": "Ghana", "description": "A heavy or profound raga, often performed with elaborate ornamentation in vilambit (slow) tempo" },
         { "const": "Rakti", "displayName": "Rakti", "description": "A highly melodic raga known primarily for its strong emotional appeal and pleasing nature" },
-        { "const": "Thaat", "displayName": "Thaat", "description": "A principal raga that gives its name to one of the parent scales (thaats)" },
-        { "const": "Audav", "displayName": "Audav", "description": "A pentatonic raga (uses exactly 5 notes in its scale)" },
-        { "const": "Shadav", "displayName": "Shadav", "description": "A hexatonic raga (uses exactly 6 notes in its scale)" },
-        { "const": "Sampurna", "displayName": "Sampurna", "description": "A heptatonic raga (uses all 7 notes in its scale)" }
+        { "const": "Thaat", "displayName": "Thaat", "description": "A principal raga that gives its name to one of the parent scales (thaats)" }
       ],
-      "examples": ["Upanga", "Thaat", "Audav", "Sampurna"],
+      "examples": ["Upanga", "Thaat", "Vakra"],
       "tags": ["hindustani"]
     }
   }

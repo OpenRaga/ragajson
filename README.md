@@ -1,0 +1,83 @@
+# RagaJSON
+
+A machine-readable [JSON Schema](https://json-schema.org/) (draft 2020-12) for describing ragas of Indian classical music (Hindustani system).
+
+> **Status:** alpha. The schema shape may change between versions without backward compatibility.
+
+## Schema overview
+
+The schema lives in [`schema/raga.schema.json`](schema/raga.schema.json). A raga document is a single JSON object:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `name` | string (**required**) | Raga name. |
+| `system` | const `"Hindustani"` (**required**) | Indian classical music system. |
+| `thaat` | enum | Parent scale (thaat) per the Bhatkhande system — one of the ten canonical thaats. |
+| `classification` | array of enum | Traditional categories of character, origin, and melodic movement (Upanga, Bhashanga, Vakra, …). |
+| `structure` | object | Structural parameters: `aroha` and `avaroha` (arrays of sargam notes), `vadi`, `samvadi`, `pakad`. |
+| `performance` | object | Performance context: `time_of_day` (Samay Chakra), `season`, `rasa`. |
+
+Unknown properties are rejected (`additionalProperties: false`).
+
+Note that jati (Audav / Shadav / Sampurna) is intentionally not stored: it is derivable as the number of distinct notes (5 / 6 / 7) in `structure.aroha` / `structure.avaroha`.
+
+### Reference enums (`$defs`)
+
+All enumerations follow one convention: a machine-friendly `const` value plus a human-facing `displayName` and a `description`.
+
+- **`sargam_enum`** — the 12 Hindustani sargam notes in Bhatkhande notation. `const` values use ASCII UPPER_SNAKE (`SA`, `RE_KOMAL`, `MA_TIVRA`, …); `displayName` follows the Bhatkhande convention (uppercase = shuddha, lowercase = komal, `Ma+` = tivra).
+- **`classification_enum`** — traditional raga categories (Upanga, Bhashanga, Vakra, Naya, Desya, Ghana, Rakti, Thaat).
+- **`time_of_day_enum`** — the Ashta Prahar periods of the day, plus `Unrestricted`.
+- **`season_enum`** — the six Indian seasons, plus `No Specific Season`.
+- **`rasa_enum`** — emotional associations (Shringara, Karuna, Vira, …).
+
+## Usage
+
+A minimal raga document:
+
+```json
+{
+  "name": "Bhupali",
+  "system": "Hindustani",
+  "thaat": "Kalyan",
+  "structure": {
+    "aroha": ["SA", "RE", "GA", "PA", "DHA"],
+    "avaroha": ["DHA", "PA", "GA", "RE", "SA"],
+    "vadi": "GA",
+    "samvadi": "DHA"
+  },
+  "performance": {
+    "time_of_day": ["Pradosh"],
+    "rasa": ["Shanta", "Bhakti"]
+  }
+}
+```
+
+Validating with [Ajv](https://ajv.js.org/):
+
+```js
+const Ajv2020 = require("ajv/dist/2020");
+const schema = require("./schema/raga.schema.json");
+
+const ajv = new Ajv2020({ strict: false, allErrors: true });
+const validate = ajv.compile(schema);
+
+if (!validate(ragaDocument)) {
+  console.error(validate.errors);
+}
+```
+
+`strict: false` is required because the schema uses the non-standard annotation keywords `displayName` and `tags`.
+
+## Development
+
+```sh
+npm install
+npm test
+```
+
+The test suite meta-validates the schema against draft 2020-12, compiles all `$ref` links, and enforces documentation quality rules (descriptions, `examples`, `displayName`) for every enum in `$defs`.
+
+## License
+
+[MIT](LICENSE)

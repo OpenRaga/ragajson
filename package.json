@@ -1,6 +1,6 @@
 {
   "name": "ragajson",
-  "version": "0.1.0-alpha",
+  "version": "0.2.0-alpha",
   "description": "Machine-readable schema for describing ragas of Indian classical music",
   "scripts": {
     "test": "node --test"
