@@ -6,13 +6,11 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "format:json": "prettier --write \"**/*.json\"",
-    "validate": "node scripts/validate-schemas.js",
     "test": "jest"
   },
   "devDependencies": {
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
-    "glob": "^10.3.0",
     "jest": "^30.0.0",
     "prettier": "^3.0.0"
   },
