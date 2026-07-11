@@ -14,18 +14,36 @@ The schema lives in [`schema/raga.schema.json`](schema/raga.schema.json). A raga
 | `system` | const `"Hindustani"` (**required**) | Indian classical music system. |
 | `thaat` | enum | Parent scale (thaat) per the Bhatkhande system — one of the ten canonical thaats. |
 | `classification` | array of enum | Traditional categories of character, origin, and melodic movement (Upanga, Bhashanga, Vakra, …). |
-| `structure` | object | Structural parameters: `aroha` and `avaroha` (arrays of sargam notes), `vadi`, `samvadi`, `pakad`. |
+| `structure` | object | Structural parameters: `aroha` and `avaroha` (arrays of notes with octave), `vadi` and `samvadi` (pitch classes), `pakad` (array of phrases). |
 | `performance` | object | Performance context: `time_of_day` (Samay Chakra), `season`, `rasa`. |
 
 Unknown properties are rejected (`additionalProperties: false`).
 
-Note that jati (Audav / Shadav / Sampurna) is intentionally not stored: it is derivable as the number of distinct notes (5 / 6 / 7) in `structure.aroha` / `structure.avaroha`.
+Note that jati (Audav / Shadav / Sampurna) is intentionally not stored: it is derivable as the number of distinct pitch classes (5 / 6 / 7, ignoring octave) in `structure.aroha` / `structure.avaroha`.
+
+### Notation
+
+Note tokens follow the morphology `SWARA[_KOMAL|_TIVRA][_MANDRA|_TAR]`: a pitch class (`SA`, `RE`, …), an optional accidental (`_KOMAL` = flat, `_TIVRA` = sharp Ma), and an optional saptak (octave) suffix — `_MANDRA` (low) or `_TAR` (high). The unmarked octave is madhya (middle), matching the traditional convention where only the outer octaves carry dots. Transliteration never doubles long vowels: `TIVRA` (not TEEVRA), `TAR` (not TAAR).
+
+Every token carries a human-facing `displayName` using the prime sign `′` (U+2032, immune to smart-quote substitution): prefix = mandra, suffix = tar. Mapping to Bhatkhande print notation (underline = komal, acute = tivra Ma, dot below/above = mandra/tar):
+
+| const | displayName | Bhatkhande print |
+| --- | --- | --- |
+| `SA` | `Sa` | S |
+| `RE_KOMAL` | `re` | R̲ |
+| `MA_TIVRA` | `Má` | Ḿ |
+| `NI_KOMAL_MANDRA` | `′ni` | N̲ with a dot below |
+| `SA_TAR` | `Sa′` | Ṡ |
+
+Renderers that need print-grade typography (underlines, octave dots) should derive it from `const` tokens; search should treat the ASCII apostrophe `'` as equivalent to the prime `′`.
 
 ### Reference enums (`$defs`)
 
 All enumerations follow one convention: a machine-friendly `const` value plus a human-facing `displayName` and a `description`.
 
-- **`sargam_enum`** — the 12 Hindustani sargam notes in Bhatkhande notation. `const` values use ASCII UPPER_SNAKE (`SA`, `RE_KOMAL`, `MA_TIVRA`, …); `displayName` follows the Bhatkhande convention (uppercase = shuddha, lowercase = komal, `Ma+` = tivra).
+- **`sargam_enum`** — the 12 Hindustani sargam pitch classes (octave-less), used where the octave is not meaningful (`vadi`, `samvadi`). `const` values use ASCII UPPER_SNAKE (`SA`, `RE_KOMAL`, `MA_TIVRA`, …); `displayName` follows the Bhatkhande convention (uppercase = shuddha, lowercase = komal, `Má` = tivra).
+- **`note_enum`** — the 36 sargam notes with saptak: 12 pitch classes × 3 octaves (`NI_KOMAL_MANDRA`, `SA`, `SA_TAR`, …). Used in melodic sequences (`aroha`, `avaroha`, phrases).
+- **`phrase`** — an ordered, non-empty sequence of `note_enum` tokens; `pakad` is an array of phrases.
 - **`classification_enum`** — traditional raga categories (Upanga, Bhashanga, Vakra, Naya, Desya, Ghana, Rakti, Thaat).
 - **`time_of_day_enum`** — the Ashta Prahar periods of the day, plus `Unrestricted`.
 - **`season_enum`** — the six Indian seasons, plus `No Specific Season`.
@@ -41,10 +59,14 @@ A minimal raga document:
   "system": "Hindustani",
   "thaat": "Kalyan",
   "structure": {
-    "aroha": ["SA", "RE", "GA", "PA", "DHA"],
-    "avaroha": ["DHA", "PA", "GA", "RE", "SA"],
+    "aroha": ["SA", "RE", "GA", "PA", "DHA", "SA_TAR"],
+    "avaroha": ["SA_TAR", "DHA", "PA", "GA", "RE", "SA"],
     "vadi": "GA",
-    "samvadi": "DHA"
+    "samvadi": "DHA",
+    "pakad": [
+      ["GA", "RE", "SA", "DHA_MANDRA"],
+      ["SA", "RE", "GA"]
+    ]
   },
   "performance": {
     "time_of_day": ["Pradosh"],

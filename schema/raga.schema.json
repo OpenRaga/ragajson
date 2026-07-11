@@ -33,28 +33,32 @@
         "aroha": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/sargam_enum"
+            "$ref": "#/$defs/note_enum"
           },
-          "description": "Ascending sequence of notes"
+          "description": "Ascending sequence of notes (with saptak/octave)"
         },
         "avaroha": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/sargam_enum"
+            "$ref": "#/$defs/note_enum"
           },
-          "description": "Descending sequence of notes"
+          "description": "Descending sequence of notes (with saptak/octave)"
         },
         "vadi": {
           "$ref": "#/$defs/sargam_enum",
-          "description": "Vadi — principal (most prominent) note of the raga"
+          "description": "Vadi — principal (most prominent) note of the raga (pitch class, octave-independent)"
         },
         "samvadi": {
           "$ref": "#/$defs/sargam_enum",
-          "description": "Samvadi — second most prominent note of the raga"
+          "description": "Samvadi — second most prominent note of the raga (pitch class, octave-independent)"
         },
         "pakad": {
-          "type": "string",
-          "description": "Pakad — characteristic melodic phrase of the raga"
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/phrase"
+          },
+          "minItems": 1,
+          "description": "Pakad — characteristic melodic phrases of the raga"
         }
       },
       "additionalProperties": false
@@ -160,7 +164,7 @@
     },
     "sargam_enum": {
       "title": "SargamEnum",
-      "description": "Hindustani sargam notes using Bhatkhande notation. Machine‑friendly const values use ASCII UPPER_SNAKE; suffix _KOMAL denotes komal (flat) notes and _TIVRA denotes tivra (sharp). displayName follows Bhatkhande convention: uppercase = shuddha, lowercase = komal, 'Ma+' = tivra.",
+      "description": "Hindustani sargam pitch classes (octave-less) in Bhatkhande notation, used where the octave is not meaningful (vadi, samvadi); melodic sequences use note_enum instead. Machine‑friendly const values use ASCII UPPER_SNAKE; suffix _KOMAL denotes komal (flat) notes and _TIVRA denotes tivra (sharp). displayName follows Bhatkhande convention: uppercase = shuddha, lowercase = komal, 'Má' = tivra.",
       "type": "string",
       "oneOf": [
         {
@@ -189,7 +193,7 @@
         },
         {
           "const": "MA_TIVRA",
-          "displayName": "Ma+"
+          "displayName": "Má"
         },
         {
           "const": "PA",
@@ -214,6 +218,60 @@
       ],
       "examples": ["SA", "RE_KOMAL", "MA_TIVRA"],
       "tags": ["hindustani", "bhatkhande"]
+    },
+    "note_enum": {
+      "title": "NoteEnum",
+      "description": "Hindustani sargam note with saptak (octave) for melodic sequences. Token morphology: SWARA[_KOMAL|_TIVRA][_MANDRA|_TAR]; the unmarked octave is madhya. displayName uses the prime sign ′ (U+2032): prefix = mandra, suffix = tar; Má = tivra Ma. Long vowels are not doubled in transliteration (TAR, not TAAR).",
+      "type": "string",
+      "oneOf": [
+        { "const": "SA_MANDRA", "displayName": "′Sa" },
+        { "const": "RE_KOMAL_MANDRA", "displayName": "′re" },
+        { "const": "RE_MANDRA", "displayName": "′Re" },
+        { "const": "GA_KOMAL_MANDRA", "displayName": "′ga" },
+        { "const": "GA_MANDRA", "displayName": "′Ga" },
+        { "const": "MA_MANDRA", "displayName": "′Ma" },
+        { "const": "MA_TIVRA_MANDRA", "displayName": "′Má" },
+        { "const": "PA_MANDRA", "displayName": "′Pa" },
+        { "const": "DHA_KOMAL_MANDRA", "displayName": "′dha" },
+        { "const": "DHA_MANDRA", "displayName": "′Dha" },
+        { "const": "NI_KOMAL_MANDRA", "displayName": "′ni" },
+        { "const": "NI_MANDRA", "displayName": "′Ni" },
+        { "const": "SA", "displayName": "Sa" },
+        { "const": "RE_KOMAL", "displayName": "re" },
+        { "const": "RE", "displayName": "Re" },
+        { "const": "GA_KOMAL", "displayName": "ga" },
+        { "const": "GA", "displayName": "Ga" },
+        { "const": "MA", "displayName": "Ma" },
+        { "const": "MA_TIVRA", "displayName": "Má" },
+        { "const": "PA", "displayName": "Pa" },
+        { "const": "DHA_KOMAL", "displayName": "dha" },
+        { "const": "DHA", "displayName": "Dha" },
+        { "const": "NI_KOMAL", "displayName": "ni" },
+        { "const": "NI", "displayName": "Ni" },
+        { "const": "SA_TAR", "displayName": "Sa′" },
+        { "const": "RE_KOMAL_TAR", "displayName": "re′" },
+        { "const": "RE_TAR", "displayName": "Re′" },
+        { "const": "GA_KOMAL_TAR", "displayName": "ga′" },
+        { "const": "GA_TAR", "displayName": "Ga′" },
+        { "const": "MA_TAR", "displayName": "Ma′" },
+        { "const": "MA_TIVRA_TAR", "displayName": "Má′" },
+        { "const": "PA_TAR", "displayName": "Pa′" },
+        { "const": "DHA_KOMAL_TAR", "displayName": "dha′" },
+        { "const": "DHA_TAR", "displayName": "Dha′" },
+        { "const": "NI_KOMAL_TAR", "displayName": "ni′" },
+        { "const": "NI_TAR", "displayName": "Ni′" }
+      ],
+      "examples": ["SA", "NI_KOMAL_MANDRA", "SA_TAR"],
+      "tags": ["hindustani", "bhatkhande"]
+    },
+    "phrase": {
+      "title": "Phrase",
+      "description": "Melodic phrase: an ordered, non-empty sequence of sargam notes with saptak (octave).",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/note_enum"
+      },
+      "minItems": 1
     },
     "rasa_enum": {
       "title": "RasaEnum",
