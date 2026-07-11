@@ -9,6 +9,21 @@
       "type": "string",
       "description": "Raga name."
     },
+    "name_devanagari": {
+      "type": "string",
+      "pattern": "^[\\u0900-\\u097F][\\u0900-\\u097F ]*$",
+      "description": "Raga name in Devanagari script."
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true,
+      "minItems": 1,
+      "description": "Alternate names and spellings of the raga (e.g. Bhup, Bhup kalyan for Bhupali)."
+    },
     "system": {
       "const": "Hindustani",
       "description": "Indian classical music system (Hindustani)."
@@ -25,6 +40,21 @@
       },
       "uniqueItems": true,
       "description": "Raga classifications. A raga may belong to several categories at once."
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Free-form prose: history, character, note treatment, ornamentation, performance conventions — details not expressible in structured fields."
+    },
+    "similar_ragas": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true,
+      "minItems": 1,
+      "description": "Names of ragas easily confused with this one; the distinctions belong in description."
     },
     "structure": {
       "type": "object",

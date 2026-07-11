@@ -11,9 +11,13 @@ The schema lives in [`schema/raga.schema.json`](schema/raga.schema.json). A raga
 | Field | Type | Description |
 | --- | --- | --- |
 | `name` | string (**required**) | Raga name. |
+| `name_devanagari` | string | Raga name in Devanagari script (भूपाली). |
+| `aliases` | array of string | Alternate names and spellings (Bhup, Bhup kalyan). |
 | `system` | const `"Hindustani"` (**required**) | Indian classical music system. |
 | `thaat` | enum | Parent scale (thaat) per the Bhatkhande system — one of the ten canonical thaats. |
 | `classification` | array of enum | Traditional categories of character, origin, and melodic movement (Upanga, Bhashanga, Vakra, …). |
+| `description` | string | Free-form prose: history, character, note treatment, ornamentation — anything not expressible in structured fields. |
+| `similar_ragas` | array of string | Ragas easily confused with this one; the distinctions belong in `description`. |
 | `structure` | object | Structural parameters: `aroha` and `avaroha` (arrays of notes with octave), `vadi` and `samvadi` (pitch classes), `pakad` (array of phrases). |
 | `performance` | object | Performance context: `time_of_day` (Samay Chakra), `season`, `rasa`. |
 
@@ -37,7 +41,7 @@ Every token carries a human-facing `displayName` using the prime sign `′` (U+2
 
 Renderers that need print-grade typography (underlines, octave dots) should derive it from `const` tokens; search should treat the ASCII apostrophe `'` as equivalent to the prime `′`.
 
-### Reference enums (`$defs`)
+### Reference definitions (`$defs`)
 
 All enumerations follow one convention: a machine-friendly `const` value plus a human-facing `displayName` and a `description`.
 
@@ -51,13 +55,17 @@ All enumerations follow one convention: a machine-friendly `const` value plus a 
 
 ## Usage
 
-A minimal raga document:
+An example raga document:
 
 ```json
 {
   "name": "Bhupali",
+  "name_devanagari": "भूपाली",
+  "aliases": ["Bhup", "Bhup kalyan"],
   "system": "Hindustani",
   "thaat": "Kalyan",
+  "description": "A principal pentatonic evening raga: Ma and Ni are omitted; Ga and Dha are the prominent notes.",
+  "similar_ragas": ["Deshkar", "Shuddh kalyan"],
   "structure": {
     "aroha": ["SA", "RE", "GA", "PA", "DHA", "SA_TAR"],
     "avaroha": ["SA_TAR", "DHA", "PA", "GA", "RE", "SA"],
@@ -91,6 +99,12 @@ if (!validate(ragaDocument)) {
 
 `strict: false` is required because the schema uses the non-standard annotation keywords `displayName` and `tags`.
 
+A fuller example lives in [`examples/bhupali.json`](examples/bhupali.json); every document in `examples/` is validated by the test suite.
+
+## Data policy
+
+Raga documents in this repository contain only traditional, widely attested facts that appear across many independent sources: scale, prominent notes, canonical pakad, performance time. Authored content from specific publications — melodic outlines composed for a particular book, or its prose — is not copied or closely paraphrased.
+
 ## Development
 
 ```sh
@@ -98,7 +112,7 @@ npm install
 npm test
 ```
 
-The test suite meta-validates the schema against draft 2020-12, compiles all `$ref` links, and enforces documentation quality rules (descriptions, `examples`, `displayName`) for every enum in `$defs`.
+The test suite meta-validates the schema against draft 2020-12, compiles all `$ref` links, enforces documentation quality rules (descriptions, `examples`, `displayName`) for every enum in `$defs`, and validates instance documents — including every file in `examples/` — against the schema.
 
 ## License
 
