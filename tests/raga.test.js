@@ -84,4 +84,73 @@ describe("RagaJSON Schema Validation & Quality", () => {
       });
     });
   });
+
+  describe("🎵 Instance Validation", () => {
+    let validate;
+
+    before(() => {
+      const schema = JSON.parse(fs.readFileSync(filePath, "utf8"));
+      const instanceAjv = new Ajv2020({ strict: false, allErrors: true });
+      validate = instanceAjv.compile(schema);
+    });
+
+    test("accepts a document with octave tokens and pakad phrases", () => {
+      const bhupali = {
+        name: "Bhupali",
+        system: "Hindustani",
+        thaat: "Kalyan",
+        structure: {
+          aroha: ["SA", "RE", "GA", "PA", "DHA", "SA_TAR"],
+          avaroha: ["SA_TAR", "DHA", "PA", "GA", "RE", "SA"],
+          vadi: "GA",
+          samvadi: "DHA",
+          pakad: [
+            ["GA", "RE", "SA", "DHA_MANDRA"],
+            ["SA", "RE", "GA"]
+          ]
+        },
+        performance: {
+          time_of_day: ["Pradosh"],
+          rasa: ["Shanta", "Bhakti"]
+        }
+      };
+      assert.strictEqual(validate(bhupali), true, JSON.stringify(validate.errors));
+    });
+
+    test("rejects octave tokens in vadi (pitch class only)", () => {
+      const doc = {
+        name: "X",
+        system: "Hindustani",
+        structure: { vadi: "SA_TAR" }
+      };
+      assert.strictEqual(validate(doc), false);
+    });
+
+    test("rejects transliteration variants outside the convention (SA_TAAR)", () => {
+      const doc = {
+        name: "X",
+        system: "Hindustani",
+        structure: { aroha: ["SA", "SA_TAAR"] }
+      };
+      assert.strictEqual(validate(doc), false);
+    });
+
+    test("rejects pakad as a plain string", () => {
+      const doc = {
+        name: "X",
+        system: "Hindustani",
+        structure: { pakad: "GA RE SA" }
+      };
+      assert.strictEqual(validate(doc), false);
+    });
+
+    test("rejects empty phrases in pakad", () => {
+      const doc = {
+        name: "X",
+        system: "Hindustani",
+        structure: { pakad: [[]] }
+      };
+      assert.strictEqual(validate(doc), false);
+    });
+  });
 });
