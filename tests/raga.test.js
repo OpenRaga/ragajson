@@ -152,5 +152,32 @@ describe("RagaJSON Schema Validation & Quality", () => {
       };
       assert.strictEqual(validate(doc), false);
     });
+
+    test("rejects an empty aliases array", () => {
+      const doc = {
+        name: "X",
+        system: "Hindustani",
+        aliases: []
+      };
+      assert.strictEqual(validate(doc), false);
+    });
+
+    test("rejects non-Devanagari name_devanagari", () => {
+      const doc = {
+        name: "X",
+        system: "Hindustani",
+        name_devanagari: "Bhupali"
+      };
+      assert.strictEqual(validate(doc), false);
+    });
+
+    test("accepts every document in examples/", () => {
+      const files = fs.readdirSync("examples").filter(file => file.endsWith(".json"));
+      assert.ok(files.length > 0, "examples/ should contain at least one document");
+      files.forEach(file => {
+        const doc = JSON.parse(fs.readFileSync(`examples/${file}`, "utf8"));
+        assert.strictEqual(validate(doc), true, `${file}: ${JSON.stringify(validate.errors)}`);
+      });
+    });
   });
 });

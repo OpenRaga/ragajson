@@ -1,0 +1,23 @@
+{
+  "name": "Bhupali",
+  "name_devanagari": "भूपाली",
+  "aliases": ["Bhup", "Bhup kalyan"],
+  "system": "Hindustani",
+  "thaat": "Kalyan",
+  "description": "One of the principal pentatonic ragas of the Hindustani tradition: both Ma and Ni are omitted throughout. Ga is the most prominent note with Dha as its counterpart, and descending movements are typically joined by smooth glides (meend). The raga is traditionally sung in the first quarter of the night in a calm, dignified manner. Deshkar uses the same five notes but is a morning raga with a different note treatment; Shuddh kalyan shares Bhupali's pentatonic ascent while allowing traces of Ma and Ni in descent.",
+  "similar_ragas": ["Deshkar", "Shuddh kalyan"],
+  "structure": {
+    "aroha": ["SA", "RE", "GA", "PA", "DHA", "SA_TAR"],
+    "avaroha": ["SA_TAR", "DHA", "PA", "GA", "RE", "SA"],
+    "vadi": "GA",
+    "samvadi": "DHA",
+    "pakad": [
+      ["GA", "RE", "SA", "DHA_MANDRA"],
+      ["SA", "RE", "GA"]
+    ]
+  },
+  "performance": {
+    "time_of_day": ["Pradosh"],
+    "rasa": ["Shanta", "Bhakti"]
+  }
+}
