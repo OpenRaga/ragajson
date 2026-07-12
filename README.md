@@ -1,6 +1,6 @@
 # RagaJSON
 
-Machine-readable [JSON Schema](https://json-schema.org/) (draft 2020-12) formats for Indian classical music (Hindustani system): **ragas** and **talas**.
+Machine-readable [JSON Schema](https://json-schema.org/) (draft 2020-12) formats for Indian classical music (Hindustani system): **ragas**, **talas** and **recordings**.
 
 > **Status:** alpha. The schema shapes may change between versions without backward compatibility.
 
@@ -121,6 +121,20 @@ The tala schema lives in [`schema/tala.schema.json`](schema/tala.schema.json); t
 | `description` | string | Free-form prose: character, genre and instrument tradition, tempo conventions. |
 
 Consistency rules that JSON Schema cannot express — `theka` length equals the sum of `vibhags`, `clap_pattern` length equals the number of `vibhags` — are enforced by the dataset's test suite.
+
+## Recording schema
+
+The recording schema lives in [`schema/recording.schema.json`](schema/recording.schema.json); the canonical URL of the current version is `https://openraga.org/schema/recording/0.1/recording.schema.json`. One document describes one published video; its `segments` reference ragas and talas by canonical name:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `source` | string (**required**) | Canonical youtube.com watch URL — bare video id, no extra query parameters. |
+| `artist` | string (**required**) | Main performing artist with the customary honorific. |
+| `year` | integer | Year of the performance, if known (never the release or upload year). |
+| `notes` | string | Prose about the video: venue, accompanists, album. |
+| `segments` | array (**required**) | Performances within the video, in order. Each segment references at least a `raga` or `talas` (an alap has no tala, a drum solo has no raga), plus optional `form` (enum), `instrument` (enum), `start` (seconds), `notes`. |
+
+Referential integrity — segment `raga`/`talas` names resolving against the datasets, file names matching video ids — is enforced by the dataset's test suite.
 
 ## Development
 

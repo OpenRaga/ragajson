@@ -194,6 +194,77 @@ describe("🎵 Raga Instance Validation", () => {
   });
 });
 
+describe("📼 Recording Instance Validation", () => {
+  let validate;
+
+  before(() => {
+    const schema = JSON.parse(fs.readFileSync("schema/recording.schema.json", "utf8"));
+    const instanceAjv = new Ajv2020({ strict: false, allErrors: true });
+    validate = instanceAjv.compile(schema);
+  });
+
+  const darbarYaman = {
+    source: "https://www.youtube.com/watch?v=ed4SIvGjqNI",
+    artist: "Ustad Shahid Parvez",
+    notes: "Tabla: Ojas Adhiya. Darbar Festival excerpt.",
+    segments: [
+      {
+        raga: "Yaman",
+        talas: ["Tintal"],
+        form: "INSTRUMENTAL",
+        instrument: "SITAR"
+      }
+    ]
+  };
+
+  test("accepts a typical performance (raga and tala)", () => {
+    assert.strictEqual(validate(darbarYaman), true, JSON.stringify(validate.errors));
+  });
+
+  test("accepts an unmetered alap (raga only)", () => {
+    const doc = {
+      source: "https://www.youtube.com/watch?v=AAAAAAAAAAA",
+      artist: "X",
+      segments: [{ raga: "Yaman", form: "DHRUPAD" }]
+    };
+    assert.strictEqual(validate(doc), true, JSON.stringify(validate.errors));
+  });
+
+  test("accepts a drum solo (talas only)", () => {
+    const doc = {
+      source: "https://www.youtube.com/watch?v=AAAAAAAAAAA",
+      artist: "X",
+      segments: [{ talas: ["Tintal"], form: "INSTRUMENTAL", instrument: "TABLA" }]
+    };
+    assert.strictEqual(validate(doc), true, JSON.stringify(validate.errors));
+  });
+
+  test("rejects a segment with neither raga nor talas", () => {
+    const doc = {
+      source: "https://www.youtube.com/watch?v=AAAAAAAAAAA",
+      artist: "X",
+      segments: [{ form: "KHYAL" }]
+    };
+    assert.strictEqual(validate(doc), false);
+  });
+
+  test("rejects non-canonical source URLs (tracking parameters)", () => {
+    const doc = {
+      ...darbarYaman,
+      source: "https://www.youtube.com/watch?v=ed4SIvGjqNI&list=RDed4SIvGjqNI"
+    };
+    assert.strictEqual(validate(doc), false);
+  });
+
+  test("rejects a negative segment start", () => {
+    const doc = {
+      ...darbarYaman,
+      segments: [{ raga: "Yaman", start: -5 }]
+    };
+    assert.strictEqual(validate(doc), false);
+  });
+});
+
 describe("🥁 Tala Instance Validation", () => {
   let validate;
 
