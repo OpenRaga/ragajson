@@ -6,7 +6,7 @@ A machine-readable [JSON Schema](https://json-schema.org/) (draft 2020-12) for d
 
 ## Schema overview
 
-The schema lives in [`schema/raga.schema.json`](schema/raga.schema.json). A raga document is a single JSON object:
+The schema lives in [`schema/raga.schema.json`](schema/raga.schema.json); the canonical URL of the current version is [`https://openraga.org/schema/raga/0.2/raga.schema.json`](https://openraga.org/schema/raga/0.2/raga.schema.json). A raga document is a single JSON object:
 
 | Field | Type | Description |
 | --- | --- | --- |
