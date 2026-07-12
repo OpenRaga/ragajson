@@ -1,8 +1,8 @@
 # RagaJSON
 
-A machine-readable [JSON Schema](https://json-schema.org/) (draft 2020-12) for describing ragas of Indian classical music (Hindustani system).
+Machine-readable [JSON Schema](https://json-schema.org/) (draft 2020-12) formats for Indian classical music (Hindustani system): **ragas** and **talas**.
 
-> **Status:** alpha. The schema shape may change between versions without backward compatibility.
+> **Status:** alpha. The schema shapes may change between versions without backward compatibility.
 
 ## Schema overview
 
@@ -104,6 +104,23 @@ A fuller example lives in [`examples/bhupali.json`](examples/bhupali.json); ever
 ## Data policy
 
 Raga documents in this repository contain only traditional, widely attested facts that appear across many independent sources: scale, prominent notes, canonical pakad, performance time. Authored content from specific publications — melodic outlines composed for a particular book, or its prose — is not copied or closely paraphrased.
+
+## Tala schema
+
+The tala schema lives in [`schema/tala.schema.json`](schema/tala.schema.json); the canonical URL of the current version is `https://openraga.org/schema/tala/0.1/tala.schema.json`. A tala document describes a rhythm cycle:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `name` | string (**required**) | Tala name. |
+| `name_devanagari` | string | Tala name in Devanagari script (तीनताल). |
+| `aliases` | array of string | Alternate spellings (Teental, Trital). |
+| `system` | const `"Hindustani"` (**required**) | Indian classical music system. |
+| `vibhags` | array of int (**required**) | Matra count per vibhag (section). The total matra count is derivable as the sum and is intentionally not stored. |
+| `clap_pattern` | array of enum (**required**) | `TALI` (clap) / `KHALI` (wave) per vibhag; the first vibhag begins on sam — a leading `KHALI` expresses khali on sam, as in Rupak. |
+| `theka` | array of enum (**required**) | Canonical bol sequence, one token per matra; composite bols (`TIRAKITA`) occupy a single matra; `REST` marks a matra with no new stroke. |
+| `description` | string | Free-form prose: character, genre and instrument tradition, tempo conventions. |
+
+Consistency rules that JSON Schema cannot express — `theka` length equals the sum of `vibhags`, `clap_pattern` length equals the number of `vibhags` — are enforced by the dataset's test suite.
 
 ## Development
 

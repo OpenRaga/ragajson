@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openraga.org/schema/tala/0.1/tala.schema.json",
+  "title": "RagaJSON Tala Schema",
+  "description": "Machine-readable schema for describing talas (rhythm cycles) of Indian classical music.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Tala name."
+    },
+    "name_devanagari": {
+      "type": "string",
+      "pattern": "^[\\u0900-\\u097F][\\u0900-\\u097F ]*$",
+      "description": "Tala name in Devanagari script."
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true,
+      "minItems": 1,
+      "description": "Alternate names and spellings of the tala (e.g. Teental, Trital for Tintal)."
+    },
+    "system": {
+      "const": "Hindustani",
+      "description": "Indian classical music system (Hindustani)."
+    },
+    "vibhags": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "minItems": 1,
+      "description": "Division of the cycle into sections: matra count per vibhag. The total matra count of the tala is derivable as the sum and is intentionally not stored."
+    },
+    "clap_pattern": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/clap_enum"
+      },
+      "minItems": 1,
+      "description": "Gesture per vibhag, in order. The first vibhag begins on sam; a KHALI first entry expresses khali on sam (as in Rupak). Must have as many entries as vibhags."
+    },
+    "theka": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/bol_enum"
+      },
+      "minItems": 1,
+      "description": "Canonical bol sequence, one token per matra (composite bols such as TIRAKITA occupy a single matra). Must have as many entries as the sum of vibhags."
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Free-form prose: character, genre associations, instrument tradition (tabla or pakhawaj), tempo conventions — details not expressible in structured fields."
+    }
+  },
+  "required": ["name", "system", "vibhags", "clap_pattern", "theka"],
+  "additionalProperties": false,
+  "$defs": {
+    "clap_enum": {
+      "title": "ClapEnum",
+      "description": "Gesture marking the start of a vibhag in the traditional keeping of tala: a clap (tali) or a wave of the hand (khali).",
+      "type": "string",
+      "oneOf": [
+        { "const": "TALI", "displayName": "Tali", "description": "Clap — a stressed vibhag" },
+        { "const": "KHALI", "displayName": "Khali", "description": "Wave of the hand — an unstressed (empty) vibhag" }
+      ],
+      "examples": ["TALI", "KHALI"],
+      "tags": ["hindustani"]
+    },
+    "bol_enum": {
+      "title": "BolEnum",
+      "description": "Drum syllables (bols) of the tabla and pakhawaj traditions used in thekas. Composite bols (DHAGE, TIRAKITA, …) occupy one matra. REST marks a matra with no new stroke (notated — in theka writing). Transliteration does not double long vowels (TIRAKITA, not TEERAKEETA).",
+      "type": "string",
+      "oneOf": [
+        { "const": "DHA", "displayName": "Dha" },
+        { "const": "DHIN", "displayName": "Dhin" },
+        { "const": "DHI", "displayName": "Dhi" },
+        { "const": "DIN", "displayName": "Din" },
+        { "const": "TIN", "displayName": "Tin" },
+        { "const": "TI", "displayName": "Ti" },
+        { "const": "TA", "displayName": "Ta" },
+        { "const": "NA", "displayName": "Na" },
+        { "const": "TU", "displayName": "Tu" },
+        { "const": "KAT", "displayName": "Kat" },
+        { "const": "KA", "displayName": "Ka" },
+        { "const": "GA", "displayName": "Ga" },
+        { "const": "GE", "displayName": "Ge" },
+        { "const": "DHAGE", "displayName": "Dhage" },
+        { "const": "TIRAKITA", "displayName": "Tirakita" },
+        { "const": "KITA", "displayName": "Kita" },
+        { "const": "TITA", "displayName": "Tita" },
+        { "const": "KATA", "displayName": "Kata" },
+        { "const": "GADI", "displayName": "Gadi" },
+        { "const": "GANA", "displayName": "Gana" },
+        { "const": "REST", "displayName": "—" }
+      ],
+      "examples": ["DHA", "TIRAKITA", "REST"],
+      "tags": ["hindustani", "tabla", "pakhawaj"]
+    }
+  }
+}
