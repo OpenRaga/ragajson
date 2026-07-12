@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/raga.schema.json",
+  "$id": "https://openraga.org/schema/raga/0.2/raga.schema.json",
   "title": "RagaJSON Schema",
   "description": "Machine-readable schema for describing ragas of Indian classical music.",
   "type": "object",
