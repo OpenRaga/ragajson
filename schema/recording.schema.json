@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openraga.org/schema/recording/0.1/recording.schema.json",
+  "title": "RagaJSON Recording Schema",
+  "description": "Machine-readable schema for cataloguing recorded performances of Indian classical music. One document describes one published video; segments reference ragas and talas by their canonical names.",
+  "type": "object",
+  "properties": {
+    "source": {
+      "type": "string",
+      "pattern": "^https://www\\.youtube\\.com/watch\\?v=[A-Za-z0-9_-]{11}$",
+      "description": "Canonical URL of the video — youtube.com watch URL with the bare video id and no extra query parameters."
+    },
+    "artist": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Main performing artist, full name with the customary honorific (e.g. Pandit Bhimsen Joshi, Ustad Shahid Parvez)."
+    },
+    "year": {
+      "type": "integer",
+      "minimum": 1902,
+      "maximum": 2100,
+      "description": "Year of the performance, when known. Not the release or upload year — omit if only those are known."
+    },
+    "notes": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Free-form prose about the video as a whole: venue, accompanists, album, occasion."
+    },
+    "segments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/segment"
+      },
+      "minItems": 1,
+      "description": "Performances contained in the video, in order of appearance. A single-performance video has one segment."
+    }
+  },
+  "required": ["source", "artist", "segments"],
+  "additionalProperties": false,
+  "$defs": {
+    "segment": {
+      "title": "Segment",
+      "description": "One performance within the video. References at least a raga or a tala: an unmetered alap has a raga and no tala, a drum solo has talas and no raga, a typical performance has both.",
+      "type": "object",
+      "properties": {
+        "raga": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Canonical name of the raga performed (as in the raga dataset)."
+        },
+        "talas": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true,
+          "minItems": 1,
+          "description": "Canonical names of the talas used, in order of appearance (a full khyal commonly moves from a vilambit tala to a drut one). Only when attested by the source or confidently identified."
+        },
+        "form": {
+          "$ref": "#/$defs/form_enum",
+          "description": "Performance form."
+        },
+        "instrument": {
+          "$ref": "#/$defs/instrument_enum",
+          "description": "Solo instrument, for instrumental segments; vocal forms omit it."
+        },
+        "start": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Offset of the segment start within the video, in seconds. Omit for single-segment videos starting at the beginning."
+        },
+        "notes": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Free-form prose about this segment: bandish, tempo course, notable moments."
+        }
+      },
+      "anyOf": [
+        { "required": ["raga"] },
+        { "required": ["talas"] }
+      ],
+      "additionalProperties": false
+    },
+    "form_enum": {
+      "title": "FormEnum",
+      "description": "Performance forms of Hindustani music.",
+      "type": "string",
+      "oneOf": [
+        { "const": "KHYAL", "displayName": "Khyal", "description": "The dominant vocal form of modern Hindustani music" },
+        { "const": "DHRUPAD", "displayName": "Dhrupad", "description": "The oldest surviving vocal form, austere and unhurried" },
+        { "const": "DHAMAR", "displayName": "Dhamar", "description": "Dhrupad-family form in dhamar tala, associated with Holi" },
+        { "const": "THUMRI", "displayName": "Thumri", "description": "Light-classical lyrical form" },
+        { "const": "TAPPA", "displayName": "Tappa", "description": "Virtuosic ornamental form of Punjabi origin" },
+        { "const": "TARANA", "displayName": "Tarana", "description": "Vocal form built on rhythmic syllables" },
+        { "const": "INSTRUMENTAL", "displayName": "Instrumental", "description": "Instrumental rendition (alap, gat, solo)" }
+      ],
+      "examples": ["KHYAL", "INSTRUMENTAL"],
+      "tags": ["hindustani"]
+    },
+    "instrument_enum": {
+      "title": "InstrumentEnum",
+      "description": "Solo instruments of Hindustani performance practice. The dictionary keeps transliteration consistent and grows by pull request when a new instrument is needed.",
+      "type": "string",
+      "oneOf": [
+        { "const": "SITAR", "displayName": "Sitar" },
+        { "const": "SAROD", "displayName": "Sarod" },
+        { "const": "BANSURI", "displayName": "Bansuri" },
+        { "const": "SANTOOR", "displayName": "Santoor" },
+        { "const": "SARANGI", "displayName": "Sarangi" },
+        { "const": "SHEHNAI", "displayName": "Shehnai" },
+        { "const": "SURBAHAR", "displayName": "Surbahar" },
+        { "const": "RUDRA_VINA", "displayName": "Rudra vina" },
+        { "const": "VIOLIN", "displayName": "Violin" },
+        { "const": "SLIDE_GUITAR", "displayName": "Slide guitar" },
+        { "const": "TABLA", "displayName": "Tabla" },
+        { "const": "PAKHAWAJ", "displayName": "Pakhawaj" }
+      ],
+      "examples": ["SITAR", "BANSURI", "TABLA"],
+      "tags": ["hindustani"]
+    }
+  }
+}
