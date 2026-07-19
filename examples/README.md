@@ -17,11 +17,10 @@ describe.
 | --- | --- | --- |
 | `ragas/` | [raga](../schema/raga.schema.json) | `<slug>.json`, slug = lowercased name, spaces → hyphens |
 | `talas/` | [tala](../schema/tala.schema.json) | same slug rule |
-| `recordings/` | [recording](../schema/recording.schema.json) | `<video-id>.json` |
 
 `npm test` (from the repository root) validates every document here against its
-schema and runs referential checks (unique names, theka length, recording
-segments resolving to known ragas/talas).
+schema and runs referential checks (unique names, theka length = sum of
+vibhags).
 
 ## License & attribution
 
