@@ -1,6 +1,6 @@
 # RagaJSON
 
-Machine-readable [JSON Schema](https://json-schema.org/) (draft 2020-12) formats for Indian classical music (Hindustani system): **ragas**, **talas** and **recordings**.
+Machine-readable [JSON Schema](https://json-schema.org/) (draft 2020-12) formats for Indian classical music (Hindustani system): **ragas** and **talas**.
 
 > 📖 **Official documentation, schema explorers, and project info are available at [openraga.org](https://openraga.org)**
 
@@ -12,7 +12,6 @@ The canonical schemas are hosted at `openraga.org` and can be fetched directly v
 
 * **[Raga Schema](https://openraga.org/schema/raga/0.2/raga.schema.json)**
 * **[Tala Schema](https://openraga.org/schema/tala/0.1/tala.schema.json)**
-* **[Recording Schema](https://openraga.org/schema/recording/0.1/recording.schema.json)**
 
 Here is an example of validating a raga document in Node.js using [Ajv](https://ajv.js.org/) and loading the schema locally (if you cloned this repository):
 
@@ -32,8 +31,8 @@ if (!validate(ragaDocument)) {
 ## Examples
 
 The [`examples/`](examples/) directory holds documents that conform to the
-schemas — ragas, talas and recordings — so you can see the format in use.
-They are **illustrative examples, not an authoritative reference**: a small,
+schemas — ragas and talas — so you can see the format in use. They are
+**illustrative examples, not an authoritative reference**: a small,
 conservative set encoding textbook-level facts. See
 [`examples/README.md`](examples/README.md) for the layout and caveats.
 
@@ -41,7 +40,6 @@ conservative set encoding textbook-level facts. See
 examples/
   ragas/        # <slug>.json
   talas/        # <slug>.json
-  recordings/   # <video-id>.json
 ```
 
 ## Contributing & Development
