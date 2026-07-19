@@ -1,0 +1,18 @@
+{
+  "name": "Bilawal",
+  "name_devanagari": "बिलावल",
+  "aliases": ["Bilaval"],
+  "system": "Hindustani",
+  "thaat": "Bilawal",
+  "classification": ["Thaat"],
+  "description": "The raga that gives its name to the Bilawal thaat; its all-shuddha scale corresponds to the Western major scale. A calm morning raga. In present-day concert practice the Alhaiya Bilawal variety is heard far more often than the plain form.",
+  "structure": {
+    "aroha": ["SA", "RE", "GA", "MA", "PA", "DHA", "NI", "SA_TAR"],
+    "avaroha": ["SA_TAR", "NI", "DHA", "PA", "MA", "GA", "RE", "SA"],
+    "vadi": "DHA",
+    "samvadi": "GA"
+  },
+  "performance": {
+    "time_of_day": ["Purvaahn"]
+  }
+}

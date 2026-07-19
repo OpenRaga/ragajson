@@ -1,0 +1,14 @@
+{
+  "name": "Rupak",
+  "name_devanagari": "रूपक",
+  "aliases": ["Roopak"],
+  "system": "Hindustani",
+  "vibhags": [3, 2, 2],
+  "clap_pattern": ["KHALI", "TALI", "TALI"],
+  "theka": [
+    "TIN", "TIN", "NA",
+    "DHIN", "NA",
+    "DHIN", "NA"
+  ],
+  "description": "A seven-beat cycle, unique among common talas in beginning with khali on sam. Used across khyal, instrumental and light-classical repertoire."
+}

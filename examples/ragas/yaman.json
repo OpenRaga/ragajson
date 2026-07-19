@@ -1,0 +1,23 @@
+{
+  "name": "Yaman",
+  "name_devanagari": "यमन",
+  "aliases": ["Kalyan", "Iman"],
+  "system": "Hindustani",
+  "thaat": "Kalyan",
+  "classification": ["Thaat"],
+  "description": "The principal raga of the Kalyan thaat and one of the first ragas taught to students. Tivra Ma is its signature note; the ascent characteristically starts from mandra Ni and skips Pa, while the descent is complete. Serene and dignified, it opens many evening concerts.",
+  "similar_ragas": ["Yaman kalyan"],
+  "structure": {
+    "aroha": ["NI_MANDRA", "RE", "GA", "MA_TIVRA", "DHA", "NI", "SA_TAR"],
+    "avaroha": ["SA_TAR", "NI", "DHA", "PA", "MA_TIVRA", "GA", "RE", "SA"],
+    "vadi": "GA",
+    "samvadi": "NI",
+    "pakad": [
+      ["NI_MANDRA", "RE", "GA", "RE", "SA"]
+    ]
+  },
+  "performance": {
+    "time_of_day": ["Pradosh"],
+    "rasa": ["Shanta"]
+  }
+}

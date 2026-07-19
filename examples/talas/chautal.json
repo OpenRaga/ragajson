@@ -1,0 +1,17 @@
+{
+  "name": "Chautal",
+  "name_devanagari": "चौताल",
+  "aliases": ["Chartal", "Choutal"],
+  "system": "Hindustani",
+  "vibhags": [2, 2, 2, 2, 2, 2],
+  "clap_pattern": ["TALI", "KHALI", "TALI", "KHALI", "TALI", "TALI"],
+  "theka": [
+    "DHA", "DHA",
+    "DIN", "TA",
+    "KITA", "DHA",
+    "DIN", "TA",
+    "TITA", "KATA",
+    "GADI", "GANA"
+  ],
+  "description": "The principal twelve-beat pakhawaj cycle of dhrupad, sharing its skeleton with Ektal but spoken in pakhawaj bols and a heavier gait."
+}

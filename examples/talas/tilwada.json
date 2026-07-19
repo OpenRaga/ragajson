@@ -1,0 +1,15 @@
+{
+  "name": "Tilwada",
+  "name_devanagari": "तिलवाड़ा",
+  "aliases": ["Tilwara"],
+  "system": "Hindustani",
+  "vibhags": [4, 4, 4, 4],
+  "clap_pattern": ["TALI", "TALI", "KHALI", "TALI"],
+  "theka": [
+    "DHA", "TIRAKITA", "DHIN", "DHIN",
+    "DHA", "DHA", "TIN", "TIN",
+    "TA", "TIRAKITA", "DHIN", "DHIN",
+    "DHA", "DHA", "DHIN", "DHIN"
+  ],
+  "description": "A sixteen-beat cycle with Tintal's structure but its own theka; favoured for vilambit khyal, where its weight suits the slow unfolding."
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Marwa",
+  "name_devanagari": "मारवा",
+  "system": "Hindustani",
+  "thaat": "Marwa",
+  "classification": ["Thaat"],
+  "description": "The name-giving raga of the Marwa thaat. Pa is omitted entirely, and the tonic itself is touched sparingly, which lends the raga its famous restless, suspended tension. Komal Re and Dha carry the emphasis; the raga belongs to the sunset hour.",
+  "structure": {
+    "aroha": ["SA", "RE_KOMAL", "GA", "MA_TIVRA", "DHA", "NI", "SA_TAR"],
+    "avaroha": ["SA_TAR", "NI", "DHA", "MA_TIVRA", "GA", "RE_KOMAL", "SA"],
+    "vadi": "RE_KOMAL",
+    "samvadi": "DHA"
+  },
+  "performance": {
+    "time_of_day": ["Sandhya"]
+  }
+}

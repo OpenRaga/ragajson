@@ -1,0 +1,14 @@
+{
+  "name": "Dhamar",
+  "name_devanagari": "धमार",
+  "system": "Hindustani",
+  "vibhags": [5, 2, 3, 4],
+  "clap_pattern": ["TALI", "TALI", "KHALI", "TALI"],
+  "theka": [
+    "KA", "DHI", "TA", "DHI", "TA",
+    "DHA", "REST",
+    "GA", "TI", "TA",
+    "TI", "TA", "TA", "REST"
+  ],
+  "description": "A fourteen-beat pakhawaj cycle inseparable from the dhamar form and its Holi repertoire; the uneven 5+2+3+4 division gives it a distinctive swing."
+}

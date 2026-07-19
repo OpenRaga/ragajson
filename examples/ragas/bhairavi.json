@@ -1,0 +1,18 @@
+{
+  "name": "Bhairavi",
+  "name_devanagari": "भैरवी",
+  "system": "Hindustani",
+  "thaat": "Bhairavi",
+  "classification": ["Thaat"],
+  "description": "The all-komal raga that names the Bhairavi thaat: Re, Ga, Dha and Ni are all flat. Nominally an early-morning raga, in practice it is performed at any hour and traditionally concludes a concert. In its popular mishra form it freely admits all twelve notes.",
+  "structure": {
+    "aroha": ["SA", "RE_KOMAL", "GA_KOMAL", "MA", "PA", "DHA_KOMAL", "NI_KOMAL", "SA_TAR"],
+    "avaroha": ["SA_TAR", "NI_KOMAL", "DHA_KOMAL", "PA", "MA", "GA_KOMAL", "RE_KOMAL", "SA"],
+    "vadi": "MA",
+    "samvadi": "SA"
+  },
+  "performance": {
+    "time_of_day": ["Unrestricted"],
+    "rasa": ["Karuna", "Bhakti"]
+  }
+}

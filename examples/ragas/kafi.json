@@ -1,0 +1,19 @@
+{
+  "name": "Kafi",
+  "name_devanagari": "काफी",
+  "system": "Hindustani",
+  "thaat": "Kafi",
+  "classification": ["Thaat"],
+  "description": "The name-giving raga of the Kafi thaat, with komal Ga and komal Ni. It lives close to the folk and light-classical repertoire — hori, thumri and the songs of spring — and is strongly associated with the Holi season. The mood is tender and playful.",
+  "structure": {
+    "aroha": ["SA", "RE", "GA_KOMAL", "MA", "PA", "DHA", "NI_KOMAL", "SA_TAR"],
+    "avaroha": ["SA_TAR", "NI_KOMAL", "DHA", "PA", "MA", "GA_KOMAL", "RE", "SA"],
+    "vadi": "PA",
+    "samvadi": "SA"
+  },
+  "performance": {
+    "time_of_day": ["Nisha"],
+    "season": "Vasant",
+    "rasa": ["Shringara"]
+  }
+}
