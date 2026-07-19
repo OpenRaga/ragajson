@@ -1,0 +1,17 @@
+{
+  "name": "Ektal",
+  "name_devanagari": "एकताल",
+  "aliases": ["Ektaal"],
+  "system": "Hindustani",
+  "vibhags": [2, 2, 2, 2, 2, 2],
+  "clap_pattern": ["TALI", "KHALI", "TALI", "KHALI", "TALI", "TALI"],
+  "theka": [
+    "DHIN", "DHIN",
+    "DHAGE", "TIRAKITA",
+    "TU", "NA",
+    "KAT", "TA",
+    "DHAGE", "TIRAKITA",
+    "DHIN", "NA"
+  ],
+  "description": "A twelve-beat cycle in six equal vibhags. In very slow tempo it is the favourite frame of the vilambit bada khyal; in fast tempo it drives many drut compositions."
+}

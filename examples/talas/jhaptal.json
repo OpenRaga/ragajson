@@ -1,0 +1,15 @@
+{
+  "name": "Jhaptal",
+  "name_devanagari": "झपताल",
+  "aliases": ["Jhaptaal"],
+  "system": "Hindustani",
+  "vibhags": [2, 3, 2, 3],
+  "clap_pattern": ["TALI", "TALI", "KHALI", "TALI"],
+  "theka": [
+    "DHI", "NA",
+    "DHI", "DHI", "NA",
+    "TI", "NA",
+    "DHI", "DHI", "NA"
+  ],
+  "description": "A ten-beat cycle with the asymmetric 2+3+2+3 division. Common in madhya-laya khyal and instrumental gats."
+}

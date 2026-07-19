@@ -1,0 +1,17 @@
+{
+  "name": "Purvi",
+  "name_devanagari": "पूर्वी",
+  "system": "Hindustani",
+  "thaat": "Purvi",
+  "classification": ["Thaat"],
+  "description": "The name-giving raga of the Purvi thaat, performed around sunset. Komal Re and komal Dha combine with tivra Ma to give it a still, mystical colour; in performance shuddha Ma also appears in some phrases.",
+  "structure": {
+    "aroha": ["SA", "RE_KOMAL", "GA", "MA_TIVRA", "PA", "DHA_KOMAL", "NI", "SA_TAR"],
+    "avaroha": ["SA_TAR", "NI", "DHA_KOMAL", "PA", "MA_TIVRA", "GA", "RE_KOMAL", "SA"],
+    "vadi": "GA",
+    "samvadi": "NI"
+  },
+  "performance": {
+    "time_of_day": ["Sandhya"]
+  }
+}

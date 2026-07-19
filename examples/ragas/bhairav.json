@@ -1,0 +1,18 @@
+{
+  "name": "Bhairav",
+  "name_devanagari": "भैरव",
+  "system": "Hindustani",
+  "thaat": "Bhairav",
+  "classification": ["Thaat"],
+  "description": "The solemn dawn raga that names the Bhairav thaat. Komal Re and komal Dha, both rendered with a slow oscillation (andolan), define its character. Traditionally associated with Shiva and performed at daybreak in a devotional spirit.",
+  "structure": {
+    "aroha": ["SA", "RE_KOMAL", "GA", "MA", "PA", "DHA_KOMAL", "NI", "SA_TAR"],
+    "avaroha": ["SA_TAR", "NI", "DHA_KOMAL", "PA", "MA", "GA", "RE_KOMAL", "SA"],
+    "vadi": "DHA_KOMAL",
+    "samvadi": "RE_KOMAL"
+  },
+  "performance": {
+    "time_of_day": ["Pratah"],
+    "rasa": ["Bhakti", "Shanta"]
+  }
+}

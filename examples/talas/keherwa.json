@@ -1,0 +1,13 @@
+{
+  "name": "Keherwa",
+  "name_devanagari": "कहरवा",
+  "aliases": ["Kaharva", "Kaharwa"],
+  "system": "Hindustani",
+  "vibhags": [4, 4],
+  "clap_pattern": ["TALI", "KHALI"],
+  "theka": [
+    "DHA", "GE", "NA", "TI",
+    "NA", "KA", "DHIN", "NA"
+  ],
+  "description": "An eight-beat cycle of light and devotional music — bhajans, folk songs and popular music alike."
+}

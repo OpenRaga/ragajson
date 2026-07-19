@@ -2,6 +2,49 @@ const { describe, test, before } = require("node:test");
 const assert = require("node:assert");
 const Ajv2020 = require("ajv/dist/2020");
 const fs = require("fs");
+const path = require("path");
+
+function loadCollection(dir) {
+  return fs
+    .readdirSync(dir)
+    .filter(file => file.endsWith(".json"))
+    .map(file => ({
+      file,
+      doc: JSON.parse(fs.readFileSync(path.join(dir, file), "utf8"))
+    }));
+}
+
+function slugify(name) {
+  return name.toLowerCase().replace(/\s+/g, "-");
+}
+
+// Canonical names + aliases (lowercased) of every document in a collection.
+function knownNames(documents) {
+  const known = new Set();
+  documents.forEach(({ doc }) => {
+    known.add(doc.name.toLowerCase());
+    (doc.aliases || []).forEach(alias => known.add(alias.toLowerCase()));
+  });
+  return known;
+}
+
+function checkSlugFilenames(documents) {
+  documents.forEach(({ file, doc }) => {
+    const slug = slugify(doc.name);
+    assert.strictEqual(file, `${slug}.json`, `${file} should be named ${slug}.json`);
+  });
+}
+
+function checkUniqueNames(documents) {
+  const seen = new Map();
+  documents.forEach(({ file, doc }) => {
+    [doc.name, ...(doc.aliases || [])].forEach(name => {
+      const key = name.toLowerCase();
+      assert.ok(!seen.has(key), `"${name}" in ${file} is already used in ${seen.get(key)}`);
+      seen.set(key, file);
+    });
+  });
+}
 
 const schemaFiles = fs
   .readdirSync("schema")
@@ -107,6 +150,14 @@ describe("🎵 Raga Instance Validation", () => {
     validate = instanceAjv.compile(schema);
   });
 
+  test("accepts every raga document in examples/ragas", () => {
+    const documents = loadCollection("examples/ragas");
+    assert.ok(documents.length > 0, "examples/ragas should not be empty");
+    documents.forEach(({ file, doc }) => {
+      assert.strictEqual(validate(doc), true, `${file}: ${JSON.stringify(validate.errors)}`);
+    });
+  });
+
   test("accepts a document with octave tokens and pakad phrases", () => {
     const bhupali = {
       name: "Bhupali",
@@ -184,12 +235,23 @@ describe("🎵 Raga Instance Validation", () => {
     assert.strictEqual(validate(doc), false);
   });
 
-  test("accepts every document in examples/", () => {
-    const files = fs.readdirSync("examples").filter(file => file.endsWith(".json"));
-    assert.ok(files.length > 0, "examples/ should contain at least one document");
-    files.forEach(file => {
-      const doc = JSON.parse(fs.readFileSync(`examples/${file}`, "utf8"));
-      assert.strictEqual(validate(doc), true, `${file}: ${JSON.stringify(validate.errors)}`);
+  test("example raga filenames match slugified names", () => {
+    checkSlugFilenames(loadCollection("examples/ragas"));
+  });
+
+  test("example raga names and aliases are unique", () => {
+    checkUniqueNames(loadCollection("examples/ragas"));
+  });
+
+  test("similar_ragas targets are known (warns on missing)", () => {
+    const ragas = loadCollection("examples/ragas");
+    const known = knownNames(ragas);
+    ragas.forEach(({ file, doc }) => {
+      (doc.similar_ragas || []).forEach(ref => {
+        if (!known.has(ref.toLowerCase())) {
+          console.warn(`WARN ${file}: similar_ragas target "${ref}" is not among the examples yet`);
+        }
+      });
     });
   });
 });
@@ -216,6 +278,48 @@ describe("📼 Recording Instance Validation", () => {
       }
     ]
   };
+
+  test("accepts every recording document in examples/recordings", () => {
+    const documents = loadCollection("examples/recordings");
+    assert.ok(documents.length > 0, "examples/recordings should not be empty");
+    documents.forEach(({ file, doc }) => {
+      assert.strictEqual(validate(doc), true, `${file}: ${JSON.stringify(validate.errors)}`);
+    });
+  });
+
+  test("recording filenames match the video id in source", () => {
+    loadCollection("examples/recordings").forEach(({ file, doc }) => {
+      const id = doc.source.match(/v=([A-Za-z0-9_-]{11})$/)?.[1];
+      assert.strictEqual(file, `${id}.json`, `${file} should be named ${id}.json`);
+    });
+  });
+
+  test("segment ragas resolve against the raga examples", () => {
+    const known = knownNames(loadCollection("examples/ragas"));
+    loadCollection("examples/recordings").forEach(({ file, doc }) => {
+      doc.segments.forEach(segment => {
+        if (segment.raga) {
+          assert.ok(
+            known.has(segment.raga.toLowerCase()),
+            `${file}: segment raga "${segment.raga}" is not among the raga examples`
+          );
+        }
+      });
+    });
+  });
+
+  test("segment talas resolve against the tala examples (warns on missing)", () => {
+    const known = knownNames(loadCollection("examples/talas"));
+    loadCollection("examples/recordings").forEach(({ file, doc }) => {
+      doc.segments.forEach(segment => {
+        (segment.talas || []).forEach(ref => {
+          if (!known.has(ref.toLowerCase())) {
+            console.warn(`WARN ${file}: segment tala "${ref}" is not among the tala examples yet`);
+          }
+        });
+      });
+    });
+  });
 
   test("accepts a typical performance (raga and tala)", () => {
     assert.strictEqual(validate(darbarYaman), true, JSON.stringify(validate.errors));
@@ -289,6 +393,43 @@ describe("🥁 Tala Instance Validation", () => {
     ],
     description: "The universal sixteen-beat cycle of Hindustani music."
   };
+
+  test("accepts every tala document in examples/talas", () => {
+    const documents = loadCollection("examples/talas");
+    assert.ok(documents.length > 0, "examples/talas should not be empty");
+    documents.forEach(({ file, doc }) => {
+      assert.strictEqual(validate(doc), true, `${file}: ${JSON.stringify(validate.errors)}`);
+    });
+  });
+
+  test("example tala filenames match slugified names", () => {
+    checkSlugFilenames(loadCollection("examples/talas"));
+  });
+
+  test("example tala names and aliases are unique", () => {
+    checkUniqueNames(loadCollection("examples/talas"));
+  });
+
+  test("clap_pattern has one entry per vibhag", () => {
+    loadCollection("examples/talas").forEach(({ file, doc }) => {
+      assert.strictEqual(
+        doc.clap_pattern.length,
+        doc.vibhags.length,
+        `${file}: clap_pattern length must equal the number of vibhags`
+      );
+    });
+  });
+
+  test("theka length equals the sum of vibhags", () => {
+    loadCollection("examples/talas").forEach(({ file, doc }) => {
+      const matras = doc.vibhags.reduce((sum, count) => sum + count, 0);
+      assert.strictEqual(
+        doc.theka.length,
+        matras,
+        `${file}: theka has ${doc.theka.length} bols for ${matras} matras`
+      );
+    });
+  });
 
   test("accepts a canonical Tintal document", () => {
     assert.strictEqual(validate(tintal), true, JSON.stringify(validate.errors));

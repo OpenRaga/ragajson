@@ -1,0 +1,13 @@
+{
+  "source": "https://www.youtube.com/watch?v=ed4SIvGjqNI",
+  "artist": "Ustad Shahid Parvez",
+  "notes": "Sitar, with Ojas Adhiya on tabla; a layakari-focused excerpt published on Darbar's official channel, whose description names the sixteen-beat tintal cycle.",
+  "segments": [
+    {
+      "raga": "Yaman",
+      "talas": ["Tintal"],
+      "form": "INSTRUMENTAL",
+      "instrument": "SITAR"
+    }
+  ]
+}

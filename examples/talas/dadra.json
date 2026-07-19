@@ -1,0 +1,12 @@
+{
+  "name": "Dadra",
+  "name_devanagari": "दादरा",
+  "system": "Hindustani",
+  "vibhags": [3, 3],
+  "clap_pattern": ["TALI", "KHALI"],
+  "theka": [
+    "DHA", "DHIN", "NA",
+    "DHA", "TIN", "NA"
+  ],
+  "description": "A six-beat light-classical cycle that lends its name to the dadra genre; ubiquitous in thumri, ghazal and folk-derived repertoire."
+}

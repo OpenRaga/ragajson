@@ -1,0 +1,18 @@
+{
+  "name": "Khamaj",
+  "name_devanagari": "खमाज",
+  "system": "Hindustani",
+  "thaat": "Khamaj",
+  "classification": ["Thaat"],
+  "description": "The name-giving raga of the Khamaj thaat, at home in both classical and light-classical genres such as thumri. It uses both varieties of Ni — shuddha in the ascent, komal in the descent — and omits Re in the ascent. The mood is playful and romantic.",
+  "structure": {
+    "aroha": ["SA", "GA", "MA", "PA", "DHA", "NI", "SA_TAR"],
+    "avaroha": ["SA_TAR", "NI_KOMAL", "DHA", "PA", "MA", "GA", "RE", "SA"],
+    "vadi": "GA",
+    "samvadi": "NI"
+  },
+  "performance": {
+    "time_of_day": ["Nisha"],
+    "rasa": ["Shringara"]
+  }
+}

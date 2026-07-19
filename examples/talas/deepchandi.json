@@ -1,0 +1,15 @@
+{
+  "name": "Deepchandi",
+  "name_devanagari": "दीपचंदी",
+  "aliases": ["Dipchandi"],
+  "system": "Hindustani",
+  "vibhags": [3, 4, 3, 4],
+  "clap_pattern": ["TALI", "TALI", "KHALI", "TALI"],
+  "theka": [
+    "DHA", "DHIN", "REST",
+    "DHA", "DHA", "TIN", "REST",
+    "TA", "TIN", "REST",
+    "DHA", "DHA", "DHIN", "REST"
+  ],
+  "description": "A fourteen-beat cycle whose sustained pauses give it a swaying, unhurried gait; a signature frame of thumri and semi-classical singing."
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Asavari",
+  "name_devanagari": "आसावरी",
+  "system": "Hindustani",
+  "thaat": "Asavari",
+  "classification": ["Thaat"],
+  "description": "The name-giving raga of the Asavari thaat. Ga and Ni are omitted in the ascent; komal Dha, rendered with a slow oscillation, is the focal note. A late-morning raga of a gentle, melancholic disposition. The variety with komal Re is usually treated as a separate raga (Komal Rishabh Asavari).",
+  "structure": {
+    "aroha": ["SA", "RE", "MA", "PA", "DHA_KOMAL", "SA_TAR"],
+    "avaroha": ["SA_TAR", "NI_KOMAL", "DHA_KOMAL", "PA", "MA", "GA_KOMAL", "RE", "SA"],
+    "vadi": "DHA_KOMAL",
+    "samvadi": "GA_KOMAL"
+  },
+  "performance": {
+    "time_of_day": ["Madhyaahn"]
+  }
+}

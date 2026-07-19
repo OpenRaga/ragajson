@@ -1,0 +1,19 @@
+{
+  "name": "Todi",
+  "name_devanagari": "तोड़ी",
+  "aliases": ["Miyan ki Todi"],
+  "system": "Hindustani",
+  "thaat": "Todi",
+  "classification": ["Thaat"],
+  "description": "The name-giving raga of the Todi thaat: komal Re, komal Ga and komal Dha with tivra Ma. In performance — where the Miyan ki Todi form is the default — Pa is often withheld in the ascent. A late-morning raga whose plaintive colour is a byword for karuna rasa.",
+  "structure": {
+    "aroha": ["SA", "RE_KOMAL", "GA_KOMAL", "MA_TIVRA", "PA", "DHA_KOMAL", "NI", "SA_TAR"],
+    "avaroha": ["SA_TAR", "NI", "DHA_KOMAL", "PA", "MA_TIVRA", "GA_KOMAL", "RE_KOMAL", "SA"],
+    "vadi": "DHA_KOMAL",
+    "samvadi": "GA_KOMAL"
+  },
+  "performance": {
+    "time_of_day": ["Madhyaahn"],
+    "rasa": ["Karuna"]
+  }
+}

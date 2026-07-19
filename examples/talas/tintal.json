@@ -1,0 +1,15 @@
+{
+  "name": "Tintal",
+  "name_devanagari": "तीनताल",
+  "aliases": ["Teental", "Trital"],
+  "system": "Hindustani",
+  "vibhags": [4, 4, 4, 4],
+  "clap_pattern": ["TALI", "TALI", "KHALI", "TALI"],
+  "theka": [
+    "DHA", "DHIN", "DHIN", "DHA",
+    "DHA", "DHIN", "DHIN", "DHA",
+    "DHA", "TIN", "TIN", "TA",
+    "TA", "DHIN", "DHIN", "DHA"
+  ],
+  "description": "The universal sixteen-beat cycle and the most common tala of Hindustani music, at home in every tempo and nearly every genre, vocal and instrumental alike."
+}
