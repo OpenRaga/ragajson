@@ -5,6 +5,8 @@ show the format in use and to give the test suite real instances to validate
 against — **not** as an authoritative reference on the ragas and talas they
 describe.
 
+Browse them rendered for reading at [openraga.org](https://openraga.org).
+
 > **Status:** early alpha, alongside the format itself. The set is small and
 > deliberately conservative: it encodes widely attested, textbook-level facts
 > (mostly following the Bhatkhande tradition). Where authorities disagree —
